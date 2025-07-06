@@ -55,7 +55,7 @@ TajneedOffice is a comprehensive candidate management system designed for the Ro
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/TajneedOffice.git
+git clone https://github.com/Almutasim90/TajneedOffice.git
 cd TajneedOffice
 ```
 
@@ -155,4 +155,4 @@ For support and questions, please contact the development team or create an issu
 
 ---
 
-**Note**: This system is designed specifically for the Royal Air Force of Oman's recruitment and evaluation processes. All data and processes are aligned with RAFO's operational requirements and security standards. 
+**Note**: This system is designed specifically for the Royal Air Force of Oman's recruitment and evaluation processes. All data and processes are aligned with RAFO's operational requirements and security standards.
