@@ -1,0 +1,157 @@
+@model TajneedOffice.Models.User
+
+@{
+    ViewData["Title"] = "إضافة مستخدم جديد";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-user-plus"></i> إضافة مستخدم جديد</h1>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-right"></i> العودة للقائمة
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> بيانات المستخدم</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <!-- Basic Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2">المعلومات الأساسية</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="FullName" class="form-label">الاسم الكامل *</label>
+                                    <input asp-for="FullName" class="form-control" placeholder="أدخل الاسم الكامل" />
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ServiceNumber" class="form-label">الرقم العسكري *</label>
+                                    <input asp-for="ServiceNumber" class="form-control" placeholder="أدخل الرقم العسكري" />
+                                    <span asp-validation-for="ServiceNumber" class="text-danger"></span>
+                                    <small class="form-text text-muted">يجب أن يكون الرقم العسكري فريداً</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="RankId" class="form-label">الرتبة *</label>
+                                    <select asp-for="RankId" class="form-select">
+                                        <option value="">اختر الرتبة</option>
+                                        @foreach (var rank in ViewBag.Ranks)
+                                        {
+                                            <option value="@rank.Value">@rank.Text</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="RankId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Position" class="form-label">المنصب</label>
+                                    <input asp-for="Position" class="form-control" placeholder="أدخل المنصب" />
+                                    <span asp-validation-for="Position" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">الدور *</label>
+                                    <select name="role" class="form-select" required>
+                                        <option value="">اختر الدور</option>
+                                        @foreach (var role in ViewBag.Roles)
+                                        {
+                                            <option value="@role.Value">@role.Text</option>
+                                        }
+                                    </select>
+                                    <span class="text-danger field-validation-error" data-valmsg-for="role"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2">معلومات الحساب</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">كلمة المرور *</label>
+                                    <input type="password" name="password" class="form-control" placeholder="أدخل كلمة المرور" required />
+                                    <span class="text-danger field-validation-error" data-valmsg-for="password"></span>
+                                    <small class="form-text text-muted">يجب أن تحتوي على 6 أحرف على الأقل</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">تأكيد كلمة المرور *</label>
+                                    <input type="password" name="confirmPassword" class="form-control" placeholder="أعد إدخال كلمة المرور" required />
+                                    <span class="text-danger field-validation-error" data-valmsg-for="confirmPassword"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input asp-for="IsActive" class="form-check-input" />
+                                        <label asp-for="IsActive" class="form-check-label">نشط</label>
+                                    </div>
+                                    <span asp-validation-for="IsActive" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a asp-action="Index" class="btn btn-secondary">
+                                        <i class="fas fa-times"></i> إلغاء
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> حفظ المستخدم
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // Password confirmation validation
+            $('input[name="confirmPassword"]').on('input', function() {
+                var password = $('input[name="password"]').val();
+                var confirmPassword = $(this).val();
+                
+                if (password !== confirmPassword) {
+                    $(this).addClass('is-invalid');
+                    if (!$(this).next('.invalid-feedback').length) {
+                        $(this).after('<div class="invalid-feedback">كلمة المرور غير متطابقة</div>');
+                    }
+                } else {
+                    $(this).removeClass('is-invalid');
+                    $(this).next('.invalid-feedback').remove();
+                }
+            });
+        });
+    </script>
+} 

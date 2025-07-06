@@ -1,0 +1,140 @@
+@model TajneedOffice.Models.User
+
+@{
+    ViewData["Title"] = "تعديل المستخدم";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-user-edit"></i> تعديل المستخدم</h1>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-right"></i> العودة للقائمة
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> بيانات المستخدم</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <!-- Basic Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2">المعلومات الأساسية</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="FullName" class="form-label">الاسم الكامل *</label>
+                                    <input asp-for="FullName" class="form-control" placeholder="أدخل الاسم الكامل" />
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ServiceNumber" class="form-label">الرقم العسكري *</label>
+                                    <input asp-for="ServiceNumber" class="form-control" placeholder="أدخل الرقم العسكري" />
+                                    <span asp-validation-for="ServiceNumber" class="text-danger"></span>
+                                    <small class="form-text text-muted">يجب أن يكون الرقم العسكري فريداً</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="RankId" class="form-label">الرتبة *</label>
+                                    <select asp-for="RankId" class="form-select">
+                                        <option value="">اختر الرتبة</option>
+                                        @foreach (var rank in ViewBag.Ranks)
+                                        {
+                                            if (Model.RankId.ToString() == rank.Value)
+                                            {
+                                                <option value="@rank.Value" selected>@rank.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@rank.Value">@rank.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="RankId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Position" class="form-label">المنصب</label>
+                                    <input asp-for="Position" class="form-control" placeholder="أدخل المنصب" />
+                                    <span asp-validation-for="Position" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">الدور *</label>
+                                    <select name="role" class="form-select" required>
+                                        <option value="">اختر الدور</option>
+                                        @foreach (var role in ViewBag.Roles)
+                                        {
+                                            if (ViewBag.CurrentRole?.ToString() == role.Value)
+                                            {
+                                                <option value="@role.Value" selected>@role.Text</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@role.Value">@role.Text</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span class="text-danger field-validation-error" data-valmsg-for="role"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Status -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2">حالة الحساب</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input asp-for="IsActive" class="form-check-input" />
+                                        <label asp-for="IsActive" class="form-check-label">نشط</label>
+                                    </div>
+                                    <span asp-validation-for="IsActive" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a asp-action="Index" class="btn btn-secondary">
+                                        <i class="fas fa-times"></i> إلغاء
+                                    </a>
+                                    <a asp-action="ChangePassword" asp-route-id="@Model.Id" class="btn btn-info">
+                                        <i class="fas fa-key"></i> تغيير كلمة المرور
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> حفظ التغييرات
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

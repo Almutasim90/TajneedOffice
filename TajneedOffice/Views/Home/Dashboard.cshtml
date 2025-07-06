@@ -1,0 +1,218 @@
+@{
+    ViewData["Title"] = "لوحة التحكم";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="h3 mb-4 text-gray-800">لوحة التحكم - مكتب تاجنيد القوات الجوية</h1>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-right-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                إجمالي المرشحين
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalCandidates</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-right-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                التقييمات المكتملة
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.CompletedEvaluations</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-check fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-right-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                التقييمات المعلقة
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.PendingEvaluations</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-right-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                المرشحين المقبولين
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.ApprovedCandidates</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-thumbs-up fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">إجراءات سريعة</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <a href="@Url.Action("Create", "Candidates")" class="btn btn-primary btn-block">
+                                <i class="fas fa-plus"></i> إضافة مرشح جديد
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="@Url.Action("Index", "Candidates")" class="btn btn-info btn-block">
+                                <i class="fas fa-list"></i> عرض جميع المرشحين
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="@Url.Action("Create", "Evaluations")" class="btn btn-success btn-block">
+                                <i class="fas fa-edit"></i> إنشاء تقييم جديد
+                            </a>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <a href="@Url.Action("Index", "Evaluations")" class="btn btn-warning btn-block">
+                                <i class="fas fa-chart-bar"></i> عرض التقييمات
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">آخر التحديثات</h6>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>تم إضافة مرشح جديد</strong>
+                                <br>
+                                <small class="text-muted">أحمد محمد علي - طيار</small>
+                            </div>
+                            <span class="badge badge-primary badge-pill">منذ 5 دقائق</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>تم إكمال تقييم</strong>
+                                <br>
+                                <small class="text-muted">محمد سعيد أحمد - جامعة عسكرية</small>
+                            </div>
+                            <span class="badge badge-success badge-pill">منذ 15 دقيقة</span>
+                        </div>
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>تم قبول مرشح</strong>
+                                <br>
+                                <small class="text-muted">فاطمة علي محمد - ثانوية</small>
+                            </div>
+                            <span class="badge badge-warning badge-pill">منذ ساعة</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Candidates -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">آخر المرشحين المضافة</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>الاسم</th>
+                                    <th>رقم الهوية</th>
+                                    <th>الفئة</th>
+                                    <th>الرتبة الحالية</th>
+                                    <th>القاعدة</th>
+                                    <th>الحالة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (ViewBag.RecentCandidates != null)
+                                {
+                                    foreach (var candidate in ViewBag.RecentCandidates)
+                                    {
+                                        <tr>
+                                            <td>@candidate.FullName</td>
+                                            <td>@candidate.NationalIdNumber</td>
+                                            <td>@candidate.Category?.CategoryName</td>
+                                            <td>@candidate.CurrentRank?.RankName</td>
+                                            <td>@candidate.CurrentAirbase?.AirbaseName</td>
+                                            <td>
+                                                <span class="badge badge-success">مكتمل</span>
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("Details", "Candidates", new { id = candidate.CandidateId })" class="btn btn-sm btn-info">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="@Url.Action("Edit", "Candidates", new { id = candidate.CandidateId })" class="btn btn-sm btn-warning">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7" class="text-center">لا توجد مرشحين حديثين</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

@@ -1,0 +1,233 @@
+@model TajneedOffice.Models.CandidateTestResult
+
+@{
+    ViewData["Title"] = "حذف نتيجة الاختبار";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-danger mb-1">
+                <i class="fas fa-trash-alt me-2"></i>
+                حذف نتيجة الاختبار
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Dashboard">لوحة التحكم</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="CandidateTestResults" asp-action="Index">نتائج الاختبارات</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">حذف النتيجة</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a asp-action="CandidateTests" asp-route-id="@Model.CandidateId" class="btn btn-outline-info me-2">
+                <i class="fas fa-user-graduate me-1"></i>
+                اختبارات المرشح
+            </a>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>
+                العودة للقائمة
+            </a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        تأكيد الحذف
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h6 class="mb-2">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            تحذير مهم!
+                        </h6>
+                        <p class="mb-0">
+                            أنت على وشك حذف نتيجة اختبار نهائياً. هذا الإجراء لا يمكن التراجع عنه.
+                            تأكد من أن هذا ما تريد فعله.
+                        </p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-header">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-user me-2"></i>
+                                        بيانات المرشح
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-2">
+                                        <strong>الاسم:</strong> @Model.Candidate.FullName
+                                    </p>
+                                    @if (!string.IsNullOrEmpty(Model.Candidate.ServiceNumber))
+                                    {
+                                        <p class="mb-2">
+                                            <strong>الرقم العسكري:</strong> @Model.Candidate.ServiceNumber
+                                        </p>
+                                    }
+                                    <p class="mb-0">
+                                        <strong>الفئة:</strong> 
+                                        <span class="badge bg-secondary">@Model.Candidate.Category.CategoryCode</span>
+                                        @Model.Candidate.Category.CategoryName
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card bg-light">
+                                <div class="card-header">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-clipboard-list me-2"></i>
+                                        بيانات الاختبار
+                                    </h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="mb-2">
+                                        <strong>اسم الاختبار:</strong> @Model.TestType.TestName
+                                    </p>
+                                    @if (!string.IsNullOrEmpty(Model.TestType.TestCode))
+                                    {
+                                        <p class="mb-2">
+                                            <strong>رمز الاختبار:</strong> @Model.TestType.TestCode
+                                        </p>
+                                    }
+                                    <p class="mb-0">
+                                        <strong>نوع المعيار:</strong> @Model.TestType.CriteriaType
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card bg-light mt-3">
+                        <div class="card-header">
+                            <h6 class="mb-0">
+                                <i class="fas fa-chart-line me-2"></i>
+                                بيانات النتيجة
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p class="mb-2">
+                                        <strong>النتيجة:</strong><br>
+                                        @if (Model.NumericScore.HasValue)
+                                        {
+                                            <span class="badge bg-info fs-6">@Model.NumericScore.Value</span>
+                                        }
+                                        @if (!string.IsNullOrEmpty(Model.TextResult))
+                                        {
+                                            @if (Model.TextResult == "لائق" || Model.TextResult == "ناجح")
+                                            {
+                                                <span class="badge bg-success">@Model.TextResult</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">@Model.TextResult</span>
+                                            }
+                                        }
+                                    </p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="mb-2">
+                                        <strong>النتيجة الموزونة:</strong><br>
+                                        @if (Model.WeightedScore.HasValue)
+                                        {
+                                            <span class="badge bg-primary">@Model.WeightedScore.Value.ToString("F2")</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">غير محسوبة</span>
+                                        }
+                                    </p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="mb-2">
+                                        <strong>الحالة:</strong><br>
+                                        @switch (Model.Status)
+                                        {
+                                            case "مؤكد":
+                                                <span class="badge bg-success">مؤكد</span>
+                                                break;
+                                            case "معلق":
+                                                <span class="badge bg-warning">معلق</span>
+                                                break;
+                                            case "ملغي":
+                                                <span class="badge bg-danger">ملغي</span>
+                                                break;
+                                        }
+                                    </p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="mb-2">
+                                        <strong>تاريخ الاختبار:</strong><br>
+                                        @Model.TestDate.ToString("yyyy/MM/dd HH:mm")
+                                    </p>
+                                </div>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(Model.EvaluatorName))
+                            {
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <p class="mb-2">
+                                            <strong>المقيم:</strong> @Model.EvaluatorName
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.Notes))
+                            {
+                                <div class="row">
+                                    <div class="col-12">
+                                        <p class="mb-0">
+                                            <strong>ملاحظات:</strong><br>
+                                            @Model.Notes
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <a asp-action="CandidateTests" asp-route-id="@Model.CandidateId" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>
+                                إلغاء
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@Model.TestResultId" class="btn btn-outline-primary ms-2">
+                                <i class="fas fa-edit me-1"></i>
+                                تعديل بدلاً من الحذف
+                            </a>
+                        </div>
+                        <div>
+                            <form asp-action="Delete" method="post" class="d-inline">
+                                <input type="hidden" asp-for="TestResultId" />
+                                <button type="submit" class="btn btn-danger" 
+                                        onclick="return confirm('هل أنت متأكد من حذف هذه النتيجة نهائياً؟')">
+                                    <i class="fas fa-trash-alt me-1"></i>
+                                    حذف نهائياً
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

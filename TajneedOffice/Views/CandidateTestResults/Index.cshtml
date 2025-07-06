@@ -1,0 +1,217 @@
+@model IEnumerable<TajneedOffice.Models.CandidateTestResult>
+
+@{
+    ViewData["Title"] = "نتائج الاختبارات";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-primary mb-1">
+                <i class="fas fa-chart-line me-2"></i>
+                نتائج الاختبارات
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Dashboard">لوحة التحكم</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">نتائج الاختبارات</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a asp-action="Create" class="btn btn-success">
+                <i class="fas fa-plus me-1"></i>
+                إضافة نتيجة جديدة
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-list me-2"></i>
+                جميع نتائج الاختبارات
+            </h5>
+            <span class="badge bg-info">@Model.Count() نتيجة</span>
+        </div>
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover" id="testResultsTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>المرشح</th>
+                                <th>الفئة</th>
+                                <th>الاختبار</th>
+                                <th>النتيجة</th>
+                                <th>النتيجة الموزونة</th>
+                                <th>الحالة</th>
+                                <th>تاريخ الاختبار</th>
+                                <th>المقيم</th>
+                                <th class="text-center">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@item.Candidate.FullName</strong>
+                                        @if (!string.IsNullOrEmpty(item.Candidate.ServiceNumber))
+                                        {
+                                            <br>
+                                            <small class="text-muted">@item.Candidate.ServiceNumber</small>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">@item.Candidate.Category.CategoryCode</span>
+                                        <br>
+                                        <small>@item.Candidate.Category.CategoryName</small>
+                                    </td>
+                                    <td>
+                                        <strong>@item.TestType.TestName</strong>
+                                        @if (!string.IsNullOrEmpty(item.TestType.TestCode))
+                                        {
+                                            <br>
+                                            <small class="text-muted">@item.TestType.TestCode</small>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.NumericScore.HasValue)
+                                        {
+                                            <span class="badge bg-info fs-6">@item.NumericScore.Value</span>
+                                        }
+                                        @if (!string.IsNullOrEmpty(item.TextResult))
+                                        {
+                                            @if (item.TextResult == "لائق" || item.TextResult == "ناجح")
+                                            {
+                                                <span class="badge bg-success">@item.TextResult</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">@item.TextResult</span>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.WeightedScore.HasValue)
+                                        {
+                                            <span class="badge bg-primary">@item.WeightedScore.Value.ToString("F2")</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @switch (item.Status)
+                                        {
+                                            case "مؤكد":
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-check me-1"></i>
+                                                    مؤكد
+                                                </span>
+                                                break;
+                                            case "معلق":
+                                                <span class="badge bg-warning">
+                                                    <i class="fas fa-clock me-1"></i>
+                                                    معلق
+                                                </span>
+                                                break;
+                                            case "ملغي":
+                                                <span class="badge bg-danger">
+                                                    <i class="fas fa-times me-1"></i>
+                                                    ملغي
+                                                </span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.TestDate.ToString("yyyy/MM/dd")
+                                        <br>
+                                        <small class="text-muted">@item.TestDate.ToString("HH:mm")</small>
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(item.EvaluatorName))
+                                        {
+                                            @item.EvaluatorName
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">غير محدد</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="CandidateTests" asp-route-id="@item.CandidateId"
+                                               class="btn btn-sm btn-outline-info"
+                                               title="عرض جميع اختبارات المرشح">
+                                                <i class="fas fa-user-graduate"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@item.TestResultId"
+                                               class="btn btn-sm btn-outline-primary"
+                                               title="تعديل">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.TestResultId"
+                                               class="btn btn-sm btn-outline-danger"
+                                               title="حذف">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-chart-line fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">لا توجد نتائج اختبارات</h5>
+                    <p class="text-muted">قم بإضافة نتيجة اختبار جديدة لبدء التسجيل</p>
+                    <a asp-action="Create" class="btn btn-success">
+                        <i class="fas fa-plus me-1"></i>
+                        إضافة نتيجة جديدة
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#testResultsTable').DataTable({
+                "language": {
+                    "url": "/localization/ar.json"
+                },
+                "order": [[ 0, "asc" ]],
+                "pageLength": 25,
+                "responsive": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": -1 }
+                ]
+            });
+
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
+        });
+    </script>
+} 

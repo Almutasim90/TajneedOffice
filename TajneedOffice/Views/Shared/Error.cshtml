@@ -1,0 +1,63 @@
+﻿@model TajneedOffice.Models.ErrorViewModel
+@{
+    ViewData["Title"] = "خطأ";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center py-5">
+                <div class="mb-4">
+                    <i class="fas fa-exclamation-triangle fa-5x text-warning"></i>
+                </div>
+                
+                <h1 class="display-4 text-danger mb-3">عذراً!</h1>
+                
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">حدث خطأ أثناء معالجة طلبك</h5>
+                                
+                                @if (Model.ShowRequestId)
+                                {
+                                    <p class="text-muted">
+                                        <strong>معرف الطلب:</strong> <code>@Model.RequestId</code>
+                                    </p>
+                                }
+                                
+                                <p class="card-text">
+                                    يرجى المحاولة مرة أخرى أو التواصل مع إدارة النظام إذا استمرت المشكلة.
+                                </p>
+                                
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+                                        <i class="fas fa-home"></i> العودة للرئيسية
+                                    </a>
+                                    <button onclick="history.back()" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-right"></i> العودة للصفحة السابقة
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row justify-content-center mt-4">
+                    <div class="col-md-8">
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-info-circle"></i> للمساعدة</h6>
+                            <p class="mb-0">
+                                إذا كنت بحاجة للمساعدة، يمكنك التواصل مع فريق الدعم الفني عبر:
+                                <br>
+                                <strong>البريد الإلكتروني:</strong> support@raf.mil.sd
+                                <br>
+                                <strong>الهاتف:</strong> +249-XXX-XXXXXXX
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

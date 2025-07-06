@@ -1,0 +1,44 @@
+@model TajneedOffice.Models.CandidateCategory
+@{
+    ViewData["Title"] = "تعديل التصنيف";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">تعديل التصنيف</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <input type="hidden" asp-for="CategoryId" />
+                        <div class="form-group">
+                            <label asp-for="CategoryName" class="control-label">اسم التصنيف</label>
+                            <input asp-for="CategoryName" class="form-control" />
+                            <span asp-validation-for="CategoryName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label">الوصف</label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CategoryCode" class="control-label">رمز التصنيف</label>
+                            <input asp-for="CategoryCode" class="form-control" />
+                            <span asp-validation-for="CategoryCode" class="text-danger"></span>
+                        </div>
+                   
+                        <div class="form-group mt-3">
+                            <input type="submit" value="حفظ" class="btn btn-primary" />
+                            <a asp-action="Index" class="btn btn-secondary">العودة للقائمة</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

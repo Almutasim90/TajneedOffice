@@ -1,0 +1,433 @@
+/* Modern Sidebar Design - Tailwind-inspired with Bootstrap */
+:root {
+    --sidebar-width: 280px;
+    --sidebar-collapsed-width: 70px;
+
+    /* خلفيات مشرقة ودافئة */
+    --background-color: #fdfcff;
+    --sidebar-bg: #f8fafc;
+    --card-bg: #fff;
+
+    /* حدود وظلال */
+    --border-color: #e5e7eb;
+    --card-shadow: 0 4px 24px 0 rgba(30,41,59,0.06);
+
+    /* نصوص */
+    --text-color: #374151;
+    --text-color-secondary: #64748b;
+    --text-color-muted: #a0aec0;
+
+    /* ألوان رئيسية */
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --accent-color: #0ea5e9;
+
+    /* ألوان إضافية */
+    --success-color: #22c55e;
+    --warning-color: #fbbf24;
+
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Light Theme Colors */
+    --link-hover-bg: #f1f5f9;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+body {
+    font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    direction: rtl;
+    overflow-x: hidden;
+    line-height: 1.6;
+    transition: background-color var(--transition), color var(--transition);
+}
+
+/* Sidebar Container */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--sidebar-bg);
+    border-left: 1px solid var(--border-color);
+    box-shadow: var(--shadow-lg);
+    transition: width 0.3s cubic-bezier(0.4,0,0.2,1), min-width 0.3s cubic-bezier(0.4,0,0.2,1), right 0.3s cubic-bezier(0.4,0,0.2,1);
+    z-index: 1040;
+    overflow-y: auto;
+    overflow-x: hidden;
+    direction: rtl;
+}
+
+.sidebar-collapsed {
+    width: var(--sidebar-collapsed-width) !important;
+    min-width: var(--sidebar-collapsed-width) !important;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    padding: 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+    color: white;
+    position: relative;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-header h3 i {
+    color: var(--primary-color);
+    margin-left: 0.75rem;
+    transition: var(--transition);
+}
+
+.sidebar-header h3 span {
+    transition: opacity 0.2s, max-width 0.3s;
+    opacity: 1;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sidebar-collapsed .sidebar-header h3 span {
+    opacity: 0;
+    max-width: 0;
+}
+
+.sidebar-collapsed .sidebar-header h3 {
+    display: none;
+}
+
+/* Toggle Button */
+#sidebarToggle {
+    background: transparent;
+    border: none;
+    color: var(--text-color-muted);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    transition: var(--transition);
+}
+
+#sidebarToggle:hover {
+    color: var(--text-color);
+    background-color: var(--link-hover-bg);
+}
+
+/* Toggle Icon Animation */
+#sidebarToggle .chevron {
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+.sidebar-collapsed #sidebarToggle .chevron {
+    transform: rotate(180deg);
+}
+
+/* Navigation Menu */
+.sidebar .components {
+    padding: 1rem 0;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    margin: 0.25rem 0;
+}
+
+/* Navigation Links */
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    color: var(--text-color-secondary);
+    text-decoration: none;
+    transition: var(--transition);
+    border-right: 4px solid transparent;
+}
+
+.sidebar .nav-link:hover {
+    background-color: var(--link-hover-bg);
+    color: var(--text-color);
+    border-right-color: var(--primary-hover);
+}
+
+.sidebar li.active > .nav-link {
+    background-color: var(--link-hover-bg);
+    color: var(--primary-color);
+    font-weight: 600;
+    border-right-color: var(--primary-color);
+}
+
+.sidebar .nav-link i {
+    margin-left: 1rem;
+    font-size: 1.2rem;
+    width: 25px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.sidebar .nav-link .menu-text {
+    opacity: 1;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+}
+
+/* Submenu Styles */
+.sidebar .submenu {
+    padding-right: 2rem;
+    background-color: var(--background-color);
+}
+
+.dark-mode .sidebar .submenu {
+    background-color: #152138; /* Slightly lighter than sidebar bg */
+}
+
+.sidebar .submenu .nav-link {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.5rem;
+    position: relative;
+}
+
+.sidebar .submenu .nav-link::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--text-color-muted);
+    transition: var(--transition);
+}
+
+.sidebar .submenu li.active > .nav-link::before,
+.sidebar .submenu .nav-link:hover::before {
+    background-color: var(--primary-color);
+}
+
+.sidebar-collapsed .submenu {
+    display: none !important;
+}
+
+/* Main Content Area should expand when sidebar is collapsed */
+.content-area {
+    margin-right: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
+    transition: var(--transition);
+    min-height: 100vh;
+    padding: 2rem;
+    background: var(--background-color);
+}
+
+.content-area.expanded {
+    margin-right: var(--sidebar-collapsed-width);
+    width: calc(100% - var(--sidebar-collapsed-width));
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(100%);
+        box-shadow: var(--shadow-lg);
+    }
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    .content-area {
+        margin-right: 0 !important;
+        padding: 1rem;
+    }
+    .content-area.expanded {
+        margin-right: 0;
+    }
+}
+
+/* Scrollbar Styling */
+.sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 2px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--text-color-muted);
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Focus States for Accessibility */
+.sidebar .nav-link:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #0f172a;
+        --sidebar-bg: #1e293b;
+        --border-color: #334155;
+        --text-color: #f1f5f9;
+        --text-color-secondary: #cbd5e1;
+        --text-color-muted: #64748b;
+    }
+}
+
+/* زر تبديل الوضع الليلي/النهاري */
+.theme-toggle {
+    background: transparent;
+    border: none;
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+.theme-toggle:hover {
+    color: var(--primary-hover);
+}
+
+/* الوضع الليلي */
+body.dark-mode {
+    --primary-color: #60a5fa;
+    --primary-hover: #3b82f6;
+    --secondary-color: #94a3b8;
+    --background-color: #1e293b;
+    --sidebar-bg: #0f172a;
+    --card-bg: #1e293b;
+    --border-color: #334155;
+    --text-color: #f8fafc;
+    --text-color-secondary: #cbd5e1;
+    --text-color-muted: #64748b;
+    --link-hover-bg: #334155;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.15);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.25), 0 4px 6px -4px rgb(0 0 0 / 0.25);
+}
+
+body.dark-mode .sidebar-header {
+    background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+}
+
+body.dark-mode .sidebar .nav-link:hover,
+body.dark-mode .sidebar .submenu .nav-link:hover {
+    background-color: rgba(96, 165, 250, 0.1); /* Brighter hover */
+    color: var(--primary-hover);
+}
+
+body.dark-mode .sidebar .nav-link:hover i,
+body.dark-mode .sidebar .submenu .nav-link:hover i {
+    color: var(--primary-hover);
+}
+
+body.dark-mode .sidebar .nav-link.active {
+    background: var(--primary-color);
+}
+
+body.dark-mode .table-hover > tbody > tr:hover > * {
+    --bs-table-accent-bg: rgba(96, 165, 250, 0.15);
+    color: var(--text-color);
+}
+
+body.dark-mode .btn-outline-secondary:hover {
+    color: #fff;
+    background-color: var(--text-color-secondary);
+    border-color: var(--text-color-secondary);
+}
+
+.sidebar-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sidebar-collapsed .sidebar-header {
+    justify-content: center; /* Center the buttons when collapsed */
+}
+
+.sidebar-collapsed .sidebar-header h3 {
+    display: none; /* Hide the brand name and icon when collapsed */
+}
+
+/* Ensure controls are centered and visible when collapsed */
+.sidebar-collapsed .sidebar-header .sidebar-controls {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Hide theme toggle button when sidebar is collapsed */
+.sidebar-collapsed .theme-toggle {
+    display: none;
+}
+
+.card, .stat-card, .action-card-hover {
+    background-color: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--border-color);
+}
+
+.stat-label, .card-text, .text-muted {
+    color: var(--text-color-muted) !important;
+}
+
+.btn-primary, .action-icon.text-primary {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}

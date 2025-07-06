@@ -1,0 +1,31 @@
+@model TajneedOffice.Models.CandidateCategory
+@{
+    ViewData["Title"] = "حذف التصنيف";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">تأكيد حذف التصنيف</h3>
+                </div>
+                <div class="card-body">
+                    <h4>هل أنت متأكد أنك تريد حذف التصنيف التالي؟</h4>
+                    <dl class="row">
+                        <dt class="col-sm-3">اسم التصنيف</dt>
+                        <dd class="col-sm-9">@Model.CategoryName</dd>
+                        <dt class="col-sm-3">رمز التصنيف</dt>
+                        <dd class="col-sm-9"><span class="badge bg-secondary">@Model.CategoryCode</span></dd>
+                        <dt class="col-sm-3">الوصف</dt>
+                        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Description) ? "لا يوجد وصف" : Model.Description)</dd>
+                    </dl>
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="CategoryId" />
+                        <button type="submit" class="btn btn-danger">حذف</button>
+                        <a asp-action="Index" class="btn btn-secondary">إلغاء</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

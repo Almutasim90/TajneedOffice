@@ -1,0 +1,71 @@
+@model TajneedOffice.Models.User
+
+@{
+    ViewData["Title"] = "تفاصيل المستخدم";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">تفاصيل المستخدم</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">الاسم الكامل</dt>
+                        <dd class="col-sm-9">@Model.FullName</dd>
+
+                        <dt class="col-sm-3">الرقم العسكري</dt>
+                        <dd class="col-sm-9">@Model.ServiceNumber</dd>
+
+                        <dt class="col-sm-3">الرتبة</dt>
+                        <dd class="col-sm-9">@(ViewBag.Rank?.RankName ?? "غير محدد")</dd>
+
+                        <dt class="col-sm-3">المنصب</dt>
+                        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Position) ? "غير محدد" : Model.Position)</dd>
+
+                        <dt class="col-sm-3">الصلاحيات</dt>
+                        <dd class="col-sm-9">
+                            @if (ViewBag.UserRoles != null && ((IEnumerable<string>)ViewBag.UserRoles).Any())
+                            {
+                                foreach (var role in (IEnumerable<string>)ViewBag.UserRoles)
+                                {
+                                    <span class="badge bg-primary me-1">@role</span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">لا توجد صلاحيات محددة</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-3">الحالة</dt>
+                        <dd class="col-sm-9">
+                            @if (Model.IsActive)
+                            {
+                                <span class="badge bg-success">مفعل</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">معطل</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-3">البريد الإلكتروني</dt>
+                        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Email) ? "غير محدد" : Model.Email)</dd>
+
+                        <dt class="col-sm-3">رقم الهاتف</dt>
+                        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.PhoneNumber) ? "غير محدد" : Model.PhoneNumber)</dd>
+                    </dl>
+
+                    <div class="mt-3">
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">تعديل</a>
+                        <a asp-action="ChangePassword" asp-route-id="@Model.Id" class="btn btn-warning">تغيير كلمة المرور</a>
+                        <a asp-action="Index" class="btn btn-secondary">العودة للقائمة</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

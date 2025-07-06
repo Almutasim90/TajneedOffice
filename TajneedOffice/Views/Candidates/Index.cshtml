@@ -1,0 +1,270 @@
+@model IEnumerable<TajneedOffice.Models.Candidate>
+
+@{
+    ViewData["Title"] = "المرشحين";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-primary mb-1">
+                <i class="fas fa-users me-2"></i>
+                المرشحون
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Dashboard">لوحة التحكم</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">المرشحون</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a asp-action="Create" class="btn btn-success">
+                <i class="fas fa-plus me-1"></i>
+                إضافة مرشح جديد
+            </a>
+        </div>
+    </div>
+
+    <!-- Search and Filter Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-search me-2"></i>
+                        البحث والتصفية
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">كلمة البحث</label>
+                            <input type="text" name="searchTerm" class="form-control" value="@ViewBag.SearchTerm" placeholder="الاسم، الرقم المدني، رقم الخدمة...">
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">الفئة</label>
+                            <select name="categoryId" class="form-select">
+                                <option value="">جميع الفئات</option>
+                                @foreach (var category in ViewBag.Categories)
+                                {
+                                    if (ViewBag.SelectedCategoryId?.ToString() == category.CategoryId.ToString())
+                                    {
+                                        <option value="@category.CategoryId" selected>@category.CategoryName</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@category.CategoryId">@category.CategoryName</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">الحالة</label>
+                            <select name="status" class="form-select">
+                                <option value="">جميع الحالات</option>
+                                @if (ViewBag.SelectedStatus == "جديد")
+                                {
+                                    <option value="جديد" selected>جديد</option>
+                                }
+                                else
+                                {
+                                    <option value="جديد">جديد</option>
+                                }
+                                @if (ViewBag.SelectedStatus == "قيد التقييم")
+                                {
+                                    <option value="قيد التقييم" selected>قيد التقييم</option>
+                                }
+                                else
+                                {
+                                    <option value="قيد التقييم">قيد التقييم</option>
+                                }
+                                @if (ViewBag.SelectedStatus == "مكتمل")
+                                {
+                                    <option value="مكتمل" selected>مكتمل</option>
+                                }
+                                else
+                                {
+                                    <option value="مكتمل">مكتمل</option>
+                                }
+                                @if (ViewBag.SelectedStatus == "مرفوض")
+                                {
+                                    <option value="مرفوض" selected>مرفوض</option>
+                                }
+                                else
+                                {
+                                    <option value="مرفوض">مرفوض</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">&nbsp;</label>
+                            <div>
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-search"></i> بحث
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Candidates Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list me-2"></i>
+                        قائمة المرشحين
+                    </h5>
+                    <span class="badge bg-info">@Model.Count() مرشح</span>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="candidatesTable">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>الاسم</th>
+                                        <th>الرقم المدني</th>
+                                        <th>رقم الخدمة</th>
+                                        <th>الفئة</th>
+                                        <th>الرتبة الحالية</th>
+                                        <th>القاعدة الجوية</th>
+                                        <th>الحالة</th>
+                                        <th class="text-center">الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var candidate in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <strong>@candidate.FullName</strong>
+                                                <br>
+                                                <small class="text-muted">@candidate.DateOfBirth.ToString("yyyy/MM/dd")</small>
+                                            </td>
+                                            <td>@candidate.NationalIdNumber</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(candidate.ServiceNumber))
+                                                {
+                                                    @candidate.ServiceNumber
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-secondary">@candidate.Category?.CategoryCode</span>
+                                                <br>
+                                                <small>@candidate.Category?.CategoryName</small>
+                                            </td>
+                                            <td>
+                                                @if (candidate.CurrentRank != null)
+                                                {
+                                                    @candidate.CurrentRank.RankName
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (candidate.CurrentAirbase != null)
+                                                {
+                                                    @candidate.CurrentAirbase.AirbaseName
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @{
+                                                    var statusClass = candidate.CurrentStatus switch
+                                                    {
+                                                        "جديد" => "bg-primary",
+                                                        "قيد التقييم" => "bg-warning",
+                                                        "مكتمل" => "bg-success",
+                                                        "مرفوض" => "bg-danger",
+                                                        _ => "bg-secondary"
+                                                    };
+                                                }
+                                                <span class="badge @statusClass">@candidate.CurrentStatus</span>
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="btn-group" role="group">
+                                                    <a asp-action="Details" asp-route-id="@candidate.CandidateId" 
+                                                       class="btn btn-sm btn-outline-info" title="عرض التفاصيل">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a asp-action="Edit" asp-route-id="@candidate.CandidateId" 
+                                                       class="btn btn-sm btn-outline-primary" title="تعديل">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a asp-controller="CandidateTestResults" asp-action="CandidateTests" asp-route-id="@candidate.CandidateId" 
+                                                       class="btn btn-sm btn-outline-success" title="الاختبارات">
+                                                        <i class="fas fa-clipboard-check"></i>
+                                                    </a>
+                                                    <a asp-action="Delete" asp-route-id="@candidate.CandidateId"
+                                                       class="btn btn-sm btn-outline-danger" title="حذف">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">لا توجد مرشحون</h5>
+                            <p class="text-muted">لم يتم العثور على مرشحين مطابقين لمعايير البحث</p>
+                            <a asp-action="Create" class="btn btn-success">
+                                <i class="fas fa-plus me-1"></i>
+                                إضافة مرشح جديد
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Initialize DataTable
+            $('#candidatesTable').DataTable({
+                "language": {
+                    "url": "/localization/ar.json"
+                },
+                "order": [[ 0, "asc" ]],
+                "pageLength": 25,
+                "responsive": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": -1 }
+                ]
+            });
+
+            // Auto-dismiss alerts
+            setTimeout(function() {
+                $('.alert-dismissible').fadeOut('slow');
+            }, 5000);
+        });
+    </script>
+} 

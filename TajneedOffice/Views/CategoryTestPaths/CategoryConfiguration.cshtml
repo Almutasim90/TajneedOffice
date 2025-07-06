@@ -1,0 +1,298 @@
+@model IEnumerable<TajneedOffice.Models.CategoryTestPath>
+
+@{
+    ViewData["Title"] = "إعداد الاختبارات للفئة";
+    var category = ViewBag.Category as TajneedOffice.Models.CandidateCategory;
+    var availableTests = ViewBag.AvailableTests as List<TajneedOffice.Models.TestType> ?? new List<TajneedOffice.Models.TestType>();
+    var totalWeight = Model.Sum(m => m.Weight);
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-primary mb-1">
+                <i class="fas fa-cogs me-2"></i>
+                إعداد الاختبارات للفئة
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Dashboard">لوحة التحكم</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="CategoryTestPaths" asp-action="Index">مسارات الاختبار</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">إعداد الفئة</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>
+                العودة للقائمة
+            </a>
+        </div>
+    </div>
+
+    @if (category != null)
+    {
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h4 class="mb-1">
+                            <span class="badge bg-primary me-2">@category.CategoryCode</span>
+                            @category.CategoryName
+                        </h4>
+                        <p class="text-muted mb-0">إجمالي الاختبارات: @Model.Count()</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <div class="d-flex justify-content-md-end align-items-center">
+                            <span class="me-3">إجمالي الأوزان:</span>
+                            <span class="badge @(totalWeight == 100 ? "bg-success" : totalWeight > 100 ? "bg-danger" : "bg-warning") fs-5">
+                                @totalWeight%
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (totalWeight != 100)
+    {
+        <div class="alert @(totalWeight > 100 ? "alert-danger" : "alert-warning") alert-dismissible fade show" role="alert">
+            <i class="fas fa-@(totalWeight > 100 ? "exclamation-triangle" : "info-circle") me-2"></i>
+            @if (totalWeight > 100)
+            {
+                <span><strong>تحذير:</strong> مجموع الأوزان يتجاوز 100%. الوزن الحالي: @totalWeight%</span>
+            }
+            else
+            {
+                <span><strong>تنبيه:</strong> مجموع الأوزان أقل من 100%. الوزن الحالي: @totalWeight%. المتبقي: @(100 - totalWeight)%</span>
+            }
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list-check me-2"></i>
+                        الاختبارات المطلوبة
+                    </h5>
+                    <span class="badge bg-info">@Model.Count() اختبار</span>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="testsTable">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>الترتيب</th>
+                                        <th>الاختبار</th>
+                                        <th>نوع المعيار</th>
+                                        <th>الوزن (%)</th>
+                                        <th>إجباري</th>
+                                        <th class="text-center">الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OrderBy(m => m.OrderIndex))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <span class="badge bg-info">@item.OrderIndex</span>
+                                            </td>
+                                            <td>
+                                                <strong>@item.TestType.TestName</strong>
+                                                @if (!string.IsNullOrEmpty(item.TestType.TestCode))
+                                                {
+                                                    <br>
+                                                    <small class="text-muted">@item.TestType.TestCode</small>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.TestType.CriteriaType == "درجات")
+                                                {
+                                                    <span class="badge bg-info">
+                                                        <i class="fas fa-calculator me-1"></i>
+                                                        درجات
+                                                    </span>
+                                                }
+                                                else if (item.TestType.CriteriaType == "لائق_غير_لائق")
+                                                {
+                                                    <span class="badge bg-warning">
+                                                        <i class="fas fa-check-double me-1"></i>
+                                                        لائق/غير لائق
+                                                    </span>
+                                                }
+                                                else if (item.TestType.CriteriaType == "ناجح_راسب")
+                                                {
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-graduation-cap me-1"></i>
+                                                        ناجح/راسب
+                                                    </span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-primary fs-6">@item.Weight%</span>
+                                            </td>
+                                            <td>
+                                                @if (item.IsMandatory)
+                                                {
+                                                    <span class="badge bg-danger">
+                                                        <i class="fas fa-exclamation me-1"></i>
+                                                        إجباري
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">اختياري</span>
+                                                }
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="btn-group" role="group">
+                                                    <a asp-action="Edit" asp-route-id="@item.PathId" 
+                                                       class="btn btn-sm btn-outline-primary" 
+                                                       title="تعديل">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a asp-action="Delete" asp-route-id="@item.PathId" 
+                                                       class="btn btn-sm btn-outline-danger" 
+                                                       title="حذف">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                            <h6 class="text-muted">لا توجد اختبارات مطلوبة لهذه الفئة</h6>
+                            <p class="text-muted small">قم بإضافة اختبار من القائمة الجانبية</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-plus-circle me-2"></i>
+                        إضافة اختبار جديد
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (availableTests.Any())
+                    {
+                        <a asp-action="Create" asp-route-categoryId="@category?.CategoryId" 
+                           class="btn btn-success w-100 mb-3">
+                            <i class="fas fa-plus me-1"></i>
+                            إضافة اختبار لهذه الفئة
+                        </a>
+                        
+                        <h6>الاختبارات المتاحة:</h6>
+                        <div class="list-group">
+                            @foreach (var test in availableTests.Take(5))
+                            {
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">@test.TestName</h6>
+                                        <small class="text-muted">@test.TestCode</small>
+                                    </div>
+                                    <p class="mb-1 small">@test.CriteriaType</p>
+                                </div>
+                            }
+                            @if (availableTests.Count() > 5)
+                            {
+                                <div class="list-group-item text-center">
+                                    <small class="text-muted">و @(availableTests.Count() - 5) اختبار آخر</small>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-3">
+                            <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                            <p class="text-success mb-0">تم إضافة جميع الاختبارات المتاحة</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        توزيع الأوزان
+                    </h6>
+                </div>
+                <div class="card-body">
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model.OrderByDescending(m => m.Weight))
+                        {
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <small>@item.TestType.TestName</small>
+                                <span class="badge bg-primary">@item.Weight%</span>
+                            </div>
+                            <div class="progress mb-3" style="height: 6px;">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: @item.Weight%" 
+                                     aria-valuenow="@item.Weight" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100"></div>
+                            </div>
+                        }
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong>المجموع</strong>
+                            <span class="badge @(totalWeight == 100 ? "bg-success" : totalWeight > 100 ? "bg-danger" : "bg-warning")">
+                                @totalWeight%
+                            </span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-3">
+                            <i class="fas fa-chart-pie fa-2x text-muted mb-2"></i>
+                            <p class="text-muted mb-0 small">لا توجد بيانات لعرضها</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#testsTable').DataTable({
+                "language": {
+                    "url": "/localization/ar.json"
+                },
+                "order": [[ 0, "asc" ]],
+                "pageLength": 10,
+                "responsive": true
+            });
+
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
+        });
+    </script>
+} 

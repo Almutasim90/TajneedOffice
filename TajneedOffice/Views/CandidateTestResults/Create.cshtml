@@ -1,0 +1,242 @@
+@model TajneedOffice.Models.CandidateTestResult
+
+@{
+    ViewData["Title"] = "إضافة نتيجة اختبار";
+    var testType = ViewBag.TestType as TajneedOffice.Models.TestType;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-primary mb-1">
+                <i class="fas fa-plus-circle me-2"></i>
+                إضافة نتيجة اختبار
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Dashboard">لوحة التحكم</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="CandidateTestResults" asp-action="Index">نتائج الاختبارات</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">إضافة نتيجة</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>
+                العودة للقائمة
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clipboard-list me-2"></i>
+                        بيانات النتيجة
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="CandidateId" class="form-label">المرشح <span class="text-danger">*</span></label>
+                                    <select asp-for="CandidateId" asp-items="@ViewBag.CandidateId" class="form-select" id="candidateSelect">
+                                        <option value="">-- اختر المرشح --</option>
+                                    </select>
+                                    <span asp-validation-for="CandidateId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="TestTypeId" class="form-label">نوع الاختبار <span class="text-danger">*</span></label>
+                                    <select asp-for="TestTypeId" asp-items="@ViewBag.TestTypeId" class="form-select" id="testTypeSelect">
+                                        <option value="">-- اختر نوع الاختبار --</option>
+                                    </select>
+                                    <span asp-validation-for="TestTypeId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="testTypeInfo" class="alert alert-info d-none">
+                            <h6 class="mb-2">معلومات الاختبار:</h6>
+                            <div id="testTypeDetails"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6" id="numericScoreDiv">
+                                <div class="mb-3">
+                                    <label asp-for="NumericScore" class="form-label">الدرجة الرقمية</label>
+                                    <input asp-for="NumericScore" class="form-control" type="number" step="0.01" />
+                                    <span asp-validation-for="NumericScore" class="text-danger"></span>
+                                    <div class="form-text" id="scoreRange"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6" id="textResultDiv">
+                                <div class="mb-3">
+                                    <label asp-for="TextResult" class="form-label">النتيجة النصية</label>
+                                    <select asp-for="TextResult" class="form-select" id="textResultSelect">
+                                        <option value="">-- اختر النتيجة --</option>
+                                    </select>
+                                    <span asp-validation-for="TextResult" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="TestDate" class="form-label">تاريخ الاختبار <span class="text-danger">*</span></label>
+                                    <input asp-for="TestDate" class="form-control" type="datetime-local" />
+                                    <span asp-validation-for="TestDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="EvaluatorName" class="form-label">المقيم</label>
+                                    <input asp-for="EvaluatorName" class="form-control" />
+                                    <span asp-validation-for="EvaluatorName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label">ملاحظات</label>
+                            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save me-1"></i>
+                                    حفظ النتيجة
+                                </button>
+                                <a asp-action="Index" class="btn btn-outline-secondary ms-2">إلغاء</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        إرشادات
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6 class="mb-2">نصائح مهمة:</h6>
+                        <ul class="mb-0 small">
+                            <li>تأكد من اختيار المرشح الصحيح</li>
+                            <li>اختر نوع الاختبار المناسب</li>
+                            <li>للاختبارات الرقمية: أدخل الدرجة ضمن النطاق المحدد</li>
+                            <li>للاختبارات النصية: اختر النتيجة المناسبة</li>
+                            <li>تاريخ الاختبار مطلوب</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <h6 class="mb-2">تنبيه:</h6>
+                        <p class="mb-0 small">
+                            لا يمكن إضافة نتيجة مكررة لنفس المرشح في نفس نوع الاختبار
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        $(document).ready(function() {
+            // Initialize form based on current selections
+            updateTestTypeInfo();
+            
+            $('#testTypeSelect').change(function() {
+                updateTestTypeInfo();
+            });
+
+            function updateTestTypeInfo() {
+                var testTypeId = $('#testTypeSelect').val();
+                if (testTypeId) {
+                    $.get('@Url.Action("GetTestTypeDetails")', { testTypeId: testTypeId })
+                        .done(function(data) {
+                            updateFormBasedOnTestType(data);
+                        });
+                } else {
+                    hideTestTypeInfo();
+                }
+            }
+
+            function updateFormBasedOnTestType(testType) {
+                $('#testTypeInfo').removeClass('d-none');
+                $('#testTypeDetails').html(
+                    '<strong>اسم الاختبار:</strong> ' + testType.testName + '<br>' +
+                    '<strong>نوع المعيار:</strong> ' + testType.criteriaType + '<br>' +
+                    (testType.description ? '<strong>الوصف:</strong> ' + testType.description + '<br>' : '')
+                );
+
+                // Show/hide form fields based on criteria type
+                if (testType.criteriaType === 'درجات') {
+                    $('#numericScoreDiv').show();
+                    $('#textResultDiv').hide();
+                    
+                    // Update score range info
+                    if (testType.minScore !== null && testType.maxScore !== null) {
+                        $('#scoreRange').text('النطاق المسموح: ' + testType.minScore + ' - ' + testType.maxScore);
+                        $('#NumericScore').attr('min', testType.minScore);
+                        $('#NumericScore').attr('max', testType.maxScore);
+                    }
+                    
+                    if (testType.passingScore !== null) {
+                        $('#scoreRange').append('<br>الحد الأدنى للنجاح: ' + testType.passingScore);
+                    }
+                } else {
+                    $('#numericScoreDiv').hide();
+                    $('#textResultDiv').show();
+                    
+                    // Populate text result options based on criteria type
+                    var options = '<option value="">-- اختر النتيجة --</option>';
+                    if (testType.criteriaType === 'لائق_غير_لائق') {
+                        options += '<option value="لائق">لائق</option>';
+                        options += '<option value="غير لائق">غير لائق</option>';
+                    } else if (testType.criteriaType === 'ناجح_راسب') {
+                        options += '<option value="ناجح">ناجح</option>';
+                        options += '<option value="راسب">راسب</option>';
+                    }
+                    $('#textResultSelect').html(options);
+                }
+            }
+
+            function hideTestTypeInfo() {
+                $('#testTypeInfo').addClass('d-none');
+                $('#numericScoreDiv').show();
+                $('#textResultDiv').show();
+                $('#scoreRange').text('');
+            }
+
+            // Set default datetime to now
+            if (!$('#TestDate').val()) {
+                var now = new Date();
+                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                $('#TestDate').val(now.toISOString().slice(0, 16));
+            }
+        });
+    </script>
+} 

@@ -1,0 +1,527 @@
+@model TajneedOffice.Models.Candidate
+
+@{
+    ViewData["Title"] = "إضافة مرشح جديد";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-primary mb-1">
+                <i class="fas fa-user-plus me-2"></i>
+                إضافة مرشح جديد
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Dashboard">لوحة التحكم</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Candidates" asp-action="Index">المرشحون</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">إضافة مرشح</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>
+                العودة للقائمة
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        بيانات المرشح
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post" id="candidateForm">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        @if (TempData["ErrorMessage"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                @TempData["ErrorMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        }
+
+                        <!-- Category Selection - الأولوية الأولى -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="alert alert-info">
+                                    <h6 class="mb-2">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        اختر الفئة أولاً
+                                    </h6>
+                                    <p class="mb-0 small">اختر فئة المرشح لتحديد البيانات المطلوبة للإدخال</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="CategoryId" class="form-label">فئة المرشح <span class="text-danger">*</span></label>
+                                    <select asp-for="CategoryId" class="form-select" id="categorySelect" onchange="toggleFieldsByCategory()" required>
+                                        <option value="">-- اختر الفئة --</option>
+                                        @if (ViewBag.Categories != null)
+                                        {
+                                            @foreach (var category in ViewBag.Categories)
+                                            {
+                                                <option value="@category.CategoryId" data-code="@category.CategoryCode">
+                                                    [@category.CategoryCode] @category.CategoryName
+                                                </option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div id="categoryInfo" class="alert alert-secondary d-none">
+                                    <h6 class="mb-1">معلومات الفئة:</h6>
+                                    <div id="categoryDetails"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Basic Information - البيانات الأساسية (مطلوبة لجميع الفئات) -->
+                        <div class="row mb-4" id="basicInfoSection">
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2 text-primary">
+                                    <i class="fas fa-user me-2"></i>
+                                    البيانات الأساسية <span class="badge bg-danger">مطلوبة</span>
+                                </h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="FullName" class="form-label">الاسم الكامل <span class="text-danger">*</span></label>
+                                    <input asp-for="FullName" class="form-control" placeholder="أدخل الاسم الكامل" />
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="NationalIdNumber" class="form-label" id="nationalIdLabel">الرقم المدني <span class="text-danger" id="nationalIdRequiredStar">*</span></label>
+                                    <input asp-for="NationalIdNumber" class="form-control" placeholder="أدخل الرقم المدني" maxlength="20" id="nationalIdInput" />
+                                    <span asp-validation-for="NationalIdNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="DateOfBirth" class="form-label">تاريخ الميلاد <span class="text-danger">*</span></label>
+                                    <input asp-for="DateOfBirth" type="date" class="form-control" />
+                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Governorate" class="form-label">الولاية <span class="text-danger">*</span></label>
+                                    <select asp-for="Governorate" class="form-select" id="governorateSelect" style="width:100%">
+                                        <option value="">-- اختر الولاية --</option>
+                                        <option value="مسقط">مسقط</option>
+                                        <option value="مطرح">مطرح</option>
+                                        <option value="العامرات">العامرات</option>
+                                        <option value="بوشر">بوشر</option>
+                                        <option value="السيب">السيب</option>
+                                        <option value="قريات">قريات</option>
+                                        <option value="صلالة">صلالة</option>
+                                        <option value="طاقة">طاقة</option>
+                                        <option value="مرباط">مرباط</option>
+                                        <option value="رخيوت">رخيوت</option>
+                                        <option value="ثمريت">ثمريت</option>
+                                        <option value="ضلكوت">ضلكوت</option>
+                                        <option value="المزيونة">المزيونة</option>
+                                        <option value="مقشن">مقشن</option>
+                                        <option value="شليم وجزر الحلانيات">شليم وجزر الحلانيات</option>
+                                        <option value="سدح">سدح</option>
+                                        <option value="خصب">خصب</option>
+                                        <option value="دبا">دبا</option>
+                                        <option value="بخا">بخا</option>
+                                        <option value="مدحاء">مدحاء</option>
+                                        <option value="البريمي">البريمي</option>
+                                        <option value="محضة">محضة</option>
+                                        <option value="السنينة">السنينة</option>
+                                        <option value="نزوى">نزوى</option>
+                                        <option value="بهلا">بهلا</option>
+                                        <option value="منح">منح</option>
+                                        <option value="الحمراء">الحمراء</option>
+                                        <option value="أدم">أدم</option>
+                                        <option value="إزكي">إزكي</option>
+                                        <option value="سمائل">سمائل</option>
+                                        <option value="بدبد">بدبد</option>
+                                        <option value="صحار">صحار</option>
+                                        <option value="شناص">شناص</option>
+                                        <option value="لوى">لوى</option>
+                                        <option value="صحم">صحم</option>
+                                        <option value="الخابورة">الخابورة</option>
+                                        <option value="السويق">السويق</option>
+                                        <option value="الرستاق">الرستاق</option>
+                                        <option value="العوابي">العوابي</option>
+                                        <option value="نخل">نخل</option>
+                                        <option value="وادي المعاول">وادي المعاول</option>
+                                        <option value="بركاء">بركاء</option>
+                                        <option value="المصنعة">المصنعة</option>
+                                        <option value="صور">صور</option>
+                                        <option value="الكامل والوافي">الكامل والوافي</option>
+                                        <option value="جعلان بني بوحسن">جعلان بني بوحسن</option>
+                                        <option value="جعلان بني بوعلي">جعلان بني بوعلي</option>
+                                        <option value="مصيرة">مصيرة</option>
+                                        <option value="إبراء">إبراء</option>
+                                        <option value="المضيبي">المضيبي</option>
+                                        <option value="بدية">بدية</option>
+                                        <option value="القابل">القابل</option>
+                                        <option value="وادي بني خالد">وادي بني خالد</option>
+                                        <option value="دماء الطائيين">دماء الطائيين</option>
+                                        <option value="عبري">عبري</option>
+                                        <option value="ينقل">ينقل</option>
+                                        <option value="ضنك">ضنك</option>
+                                        <option value="هيما">هيما</option>
+                                        <option value="محوت">محوت</option>
+                                        <option value="الدقم">الدقم</option>
+                                        <option value="الجازر">الجازر</option>
+                                        <option value="الجبل الأخضر">الجبل الأخضر</option>
+                                    </select>
+                                    <span asp-validation-for="Governorate" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information - معلومات الاتصال (مطلوبة لجميع الفئات) -->
+                        <div class="row mb-4" id="contactInfoSection">
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2 text-primary">
+                                    <i class="fas fa-phone me-2"></i>
+                                    معلومات الاتصال <span class="badge bg-info">مطلوبة جزئياً</span>
+                                </h6>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="Phone1" class="form-label">رقم الهاتف الأول</label>
+                                    <input asp-for="Phone1" class="form-control" placeholder="أدخل رقم الهاتف" />
+                                    <span asp-validation-for="Phone1" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="Phone2" class="form-label">رقم الهاتف الثاني</label>
+                                    <input asp-for="Phone2" class="form-control" placeholder="أدخل رقم الهاتف" />
+                                    <span asp-validation-for="Phone2" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="Phone3" class="form-label">رقم الهاتف الثالث</label>
+                                    <input asp-for="Phone3" class="form-control" placeholder="أدخل رقم الهاتف" />
+                                    <span asp-validation-for="Phone3" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label asp-for="Address" class="form-label">العنوان</label>
+                                    <textarea asp-for="Address" class="form-control" rows="2" placeholder="أدخل العنوان الكامل"></textarea>
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Military Information - المعلومات العسكرية (حسب الفئة) -->
+                        <div class="row mb-4 d-none" id="militaryInfoSection">
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2 text-success">
+                                    <i class="fas fa-star me-2"></i>
+                                    المعلومات العسكرية <span class="badge bg-success">مطلوبة للفئة المحددة</span>
+                                </h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ServiceNumber" class="form-label" id="serviceNumberLabel">رقم الخدمة</label>
+                                    <input asp-for="ServiceNumber" class="form-control" placeholder="أدخل رقم الخدمة" />
+                                    <span asp-validation-for="ServiceNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="CurrentRankId" class="form-label">الرتبة الحالية</label>
+                                    <select asp-for="CurrentRankId" class="form-select">
+                                        <option value="">-- اختر الرتبة --</option>
+                                        @if (ViewBag.Ranks != null)
+                                        {
+                                            @foreach (var rank in ViewBag.Ranks)
+                                            {
+                                                <option value="@rank.RankId">@rank.RankName</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="CurrentRankId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="CurrentAirbaseId" class="form-label">القاعدة الجوية</label>
+                                    <select asp-for="CurrentAirbaseId" class="form-select">
+                                        <option value="">-- اختر القاعدة الجوية --</option>
+                                        @if (ViewBag.Airbases != null)
+                                        {
+                                            @foreach (var airbase in ViewBag.Airbases)
+                                            {
+                                                <option value="@airbase.AirbaseId">@airbase.AirbaseName</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="CurrentAirbaseId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Department" class="form-label">القسم</label>
+                                    <input asp-for="Department" class="form-control" placeholder="أدخل القسم" />
+                                    <span asp-validation-for="Department" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="JobTitle" class="form-label">المسمى الوظيفي</label>
+                                    <input asp-for="JobTitle" class="form-control" placeholder="أدخل المسمى الوظيفي" />
+                                    <span asp-validation-for="JobTitle" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Educational Information - المعلومات التعليمية (حسب الفئة) -->
+                        <div class="row mb-4 d-none" id="educationInfoSection">
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2 text-warning">
+                                    <i class="fas fa-graduation-cap me-2"></i>
+                                    المعلومات التعليمية <span class="badge bg-warning">مطلوبة للفئات الجامعية</span>
+                                </h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Major" class="form-label">التخصص</label>
+                                    <input asp-for="Major" class="form-control" placeholder="أدخل التخصص" />
+                                    <span asp-validation-for="Major" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="University" class="form-label">الجامعة</label>
+                                    <input asp-for="University" class="form-control" placeholder="أدخل الجامعة" />
+                                    <span asp-validation-for="University" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="GraduationYear" class="form-label">سنة التخرج</label>
+                                    <input asp-for="GraduationYear" type="number" class="form-control" placeholder="أدخل سنة التخرج" min="1950" max="2030" />
+                                    <span asp-validation-for="GraduationYear" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="MarksGrade" class="form-label">الدرجة/المعدل</label>
+                                    <input asp-for="MarksGrade" class="form-control" placeholder="أدخل الدرجة أو المعدل" />
+                                    <span asp-validation-for="MarksGrade" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="row">
+                            <div class="col-12">
+                                <hr>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <a asp-action="Index" class="btn btn-outline-secondary">
+                                            <i class="fas fa-times me-1"></i>
+                                            إلغاء
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-save me-1"></i>
+                                            حفظ المرشح
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Category definitions with requirements
+        const categoryRequirements = {
+            'CAT-PLT': { 
+                name: 'المرشحين الطيارين',
+                military: false, 
+                education: false, 
+                serviceRequired: false,
+                nationalIdRequired: true,
+                description: 'البيانات الأساسية ومعلومات الاتصال فقط'
+            },
+            'CAT-MUG': { 
+                name: 'المرشحين الجامعيين العسكريين',
+                military: false, 
+                education: true, 
+                serviceRequired: false,
+                nationalIdRequired: true,
+                description: 'البيانات الأساسية + المعلومات التعليمية'
+            },
+            'CAT-CUG': { 
+                name: 'المرشحين الجامعيين المدنيين',
+                military: false, 
+                education: true, 
+                serviceRequired: false,
+                nationalIdRequired: true,
+                description: 'البيانات الأساسية + المعلومات التعليمية'
+            },
+            'CAT-LSO': { 
+                name: 'ضباط الخدمة المحدودة',
+                military: true, 
+                education: false, 
+                serviceRequired: true,
+                nationalIdRequired: false,
+                description: 'البيانات الأساسية + المعلومات العسكرية (رقم الخدمة مطلوب)'
+            },
+            'CAT-NCO': { 
+                name: 'ضباط الصف (رقباء/عرفاء)',
+                military: true, 
+                education: false, 
+                serviceRequired: true,
+                nationalIdRequired: false,
+                description: 'البيانات الأساسية + المعلومات العسكرية (رقم الخدمة مطلوب)'
+            },
+            'CAT-TCN': { 
+                name: 'ضباط الصف الكلية التقنية العسكرية',
+                military: true, 
+                education: false, 
+                serviceRequired: true,
+                nationalIdRequired: false,
+                description: 'البيانات الأساسية + المعلومات العسكرية (رقم الخدمة مطلوب)'
+            },
+            'CAT-CNP': { 
+                name: 'ضباط الصف المدنيين للترفيع',
+                military: true, 
+                education: false, 
+                serviceRequired: true,
+                nationalIdRequired: false,
+                description: 'البيانات الأساسية + المعلومات العسكرية (رقم الخدمة مطلوب)'
+            }
+        };
+
+        function toggleFieldsByCategory() {
+            const categorySelect = document.getElementById('categorySelect');
+            const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+            const categoryCode = selectedOption.getAttribute('data-code');
+            
+            // Hide all optional sections first
+            document.getElementById('militaryInfoSection').classList.add('d-none');
+            document.getElementById('educationInfoSection').classList.add('d-none');
+            document.getElementById('categoryInfo').classList.add('d-none');
+            
+            // Reset service number requirement
+            const serviceNumberInput = document.querySelector('[name="ServiceNumber"]');
+            const serviceNumberLabel = document.getElementById('serviceNumberLabel');
+            serviceNumberInput.removeAttribute('required');
+            serviceNumberLabel.innerHTML = 'رقم الخدمة';
+            
+            // الرقم المدني
+            const nationalIdInput = document.getElementById('nationalIdInput');
+            const nationalIdLabel = document.getElementById('nationalIdLabel');
+            const nationalIdStar = document.getElementById('nationalIdRequiredStar');
+            if (categoryCode && categoryRequirements[categoryCode] && categoryRequirements[categoryCode].nationalIdRequired === false) {
+                nationalIdInput.removeAttribute('required');
+                nationalIdStar.style.display = 'none';
+                nationalIdLabel.innerHTML = 'الرقم المدني <span class="text-muted">(اختياري للفئة المختارة)</span>';
+            } else {
+                nationalIdInput.setAttribute('required', 'required');
+                nationalIdStar.style.display = '';
+                nationalIdLabel.innerHTML = 'الرقم المدني <span class="text-danger" id="nationalIdRequiredStar">*</span>';
+            }
+            
+            if (!categoryCode || !categoryRequirements[categoryCode]) return;
+            
+            const requirements = categoryRequirements[categoryCode];
+            
+            // Show category info
+            document.getElementById('categoryInfo').classList.remove('d-none');
+            document.getElementById('categoryDetails').innerHTML = 
+                '<strong>الفئة:</strong> ' + requirements.name + '<br>' +
+                '<strong>المتطلبات:</strong> ' + requirements.description;
+            
+            // Show/hide sections based on category
+            if (requirements.military) {
+                document.getElementById('militaryInfoSection').classList.remove('d-none');
+                
+                if (requirements.serviceRequired) {
+                    serviceNumberInput.setAttribute('required', 'required');
+                    serviceNumberLabel.innerHTML = 'رقم الخدمة <span class="text-danger">*</span>';
+                }
+            }
+            
+            if (requirements.education) {
+                document.getElementById('educationInfoSection').classList.remove('d-none');
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleFieldsByCategory();
+            
+            // Form validation
+            document.getElementById('candidateForm').addEventListener('submit', function(e) {
+                const categoryId = document.getElementById('categorySelect').value;
+                const selectedOption = document.getElementById('categorySelect').options[document.getElementById('categorySelect').selectedIndex];
+                const categoryCode = selectedOption ? selectedOption.getAttribute('data-code') : null;
+                
+                console.log('=== Form Submission Debug ===');
+                console.log('CategoryId value:', categoryId);
+                console.log('CategoryCode from data-code:', categoryCode);
+                console.log('Selected option text:', selectedOption ? selectedOption.text : 'none');
+                console.log('Form data being sent:', new FormData(this));
+                
+                if (!categoryId) {
+                    alert('يرجى اختيار فئة المرشح أولاً');
+                    e.preventDefault();
+                    return false;
+                }
+                
+                // التأكد من أن القيمة صحيحة قبل الإرسال
+                console.log('Submitting form with CategoryId:', categoryId);
+                
+                // Additional validation can be added here
+                return true;
+            });
+            
+            // Auto-dismiss alerts
+            setTimeout(function() {
+                $('.alert-dismissible').fadeOut('slow');
+            }, 5000);
+        });
+
+        $(document).ready(function() {
+            $('#governorateSelect').select2({
+                placeholder: 'اختر الولاية',
+                allowClear: true,
+                width: 'resolve',
+                dir: 'rtl',
+                language: {
+                    noResults: function() {
+                        return 'لا توجد نتائج';
+                    }
+                }
+            });
+        });
+    </script>
+} 

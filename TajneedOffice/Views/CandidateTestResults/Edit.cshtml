@@ -1,0 +1,288 @@
+@model TajneedOffice.Models.CandidateTestResult
+
+@{
+    ViewData["Title"] = "تعديل نتيجة الاختبار";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-primary mb-1">
+                <i class="fas fa-edit me-2"></i>
+                تعديل نتيجة الاختبار
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Dashboard">لوحة التحكم</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="CandidateTestResults" asp-action="Index">نتائج الاختبارات</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">تعديل النتيجة</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a asp-action="CandidateTests" asp-route-id="@Model.CandidateId" class="btn btn-outline-info me-2">
+                <i class="fas fa-user-graduate me-1"></i>
+                اختبارات المرشح
+            </a>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i>
+                العودة للقائمة
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clipboard-list me-2"></i>
+                        بيانات النتيجة
+                    </h5>
+                    <div>
+                        <span class="badge bg-info">@Model.TestType.TestName</span>
+                        <span class="badge bg-secondary">@Model.Candidate.FullName</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <input type="hidden" asp-for="TestResultId" />
+                        <input type="hidden" asp-for="CandidateId" />
+                        <input type="hidden" asp-for="TestTypeId" />
+                        <input type="hidden" asp-for="CreatedDate" />
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">المرشح</label>
+                                    <input class="form-control" value="@Model.Candidate.FullName" readonly />
+                                    @if (!string.IsNullOrEmpty(Model.Candidate.ServiceNumber))
+                                    {
+                                        <div class="form-text">الرقم العسكري: @Model.Candidate.ServiceNumber</div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">نوع الاختبار</label>
+                                    <input class="form-control" value="@Model.TestType.TestName" readonly />
+                                    <div class="form-text">نوع المعيار: @Model.TestType.CriteriaType</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Model.TestType.CriteriaType == "درجات")
+                        {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label asp-for="NumericScore" class="form-label">الدرجة الرقمية <span class="text-danger">*</span></label>
+                                        <input asp-for="NumericScore" class="form-control" type="number" step="0.01" 
+                                               min="@Model.TestType.MinScore" max="@Model.TestType.MaxScore" />
+                                        <span asp-validation-for="NumericScore" class="text-danger"></span>
+                                        @if (Model.TestType.MinScore.HasValue && Model.TestType.MaxScore.HasValue)
+                                        {
+                                            <div class="form-text">النطاق المسموح: @Model.TestType.MinScore - @Model.TestType.MaxScore</div>
+                                        }
+                                        @if (Model.TestType.PassingScore.HasValue)
+                                        {
+                                            <div class="form-text">الحد الأدنى للنجاح: @Model.TestType.PassingScore</div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">حالة النجاح</label>
+                                        <div class="form-control-plaintext">
+                                            @if (Model.IsPassed == true)
+                                            {
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-check me-1"></i>
+                                                    ناجح
+                                                </span>
+                                            }
+                                            else if (Model.IsPassed == false)
+                                            {
+                                                <span class="badge bg-danger">
+                                                    <i class="fas fa-times me-1"></i>
+                                                    راسب
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">غير محدد</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label asp-for="TextResult" class="form-label">النتيجة النصية <span class="text-danger">*</span></label>
+                                        <select asp-for="TextResult" class="form-select">
+                                            <option value="">-- اختر النتيجة --</option>
+                                            @if (Model.TestType.CriteriaType == "لائق_غير_لائق")
+                                            {
+                                                <option value="لائق">لائق</option>
+                                                <option value="غير لائق">غير لائق</option>
+                                            }
+                                            else if (Model.TestType.CriteriaType == "ناجح_راسب")
+                                            {
+                                                <option value="ناجح">ناجح</option>
+                                                <option value="راسب">راسب</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="TextResult" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">حالة النجاح</label>
+                                        <div class="form-control-plaintext">
+                                            @if (Model.IsPassed == true)
+                                            {
+                                                <span class="badge bg-success">
+                                                    <i class="fas fa-check me-1"></i>
+                                                    ناجح
+                                                </span>
+                                            }
+                                            else if (Model.IsPassed == false)
+                                            {
+                                                <span class="badge bg-danger">
+                                                    <i class="fas fa-times me-1"></i>
+                                                    راسب
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">غير محدد</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="TestDate" class="form-label">تاريخ الاختبار <span class="text-danger">*</span></label>
+                                    <input asp-for="TestDate" class="form-control" type="datetime-local" />
+                                    <span asp-validation-for="TestDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="EvaluatorName" class="form-label">المقيم</label>
+                                    <input asp-for="EvaluatorName" class="form-control" />
+                                    <span asp-validation-for="EvaluatorName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Status" class="form-label">حالة النتيجة</label>
+                                    <select asp-for="Status" class="form-select">
+                                        <option value="معلق">معلق</option>
+                                        <option value="مؤكد">مؤكد</option>
+                                        <option value="ملغي">ملغي</option>
+                                    </select>
+                                    <span asp-validation-for="Status" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">النتيجة الموزونة</label>
+                                    <div class="form-control-plaintext">
+                                        @if (Model.WeightedScore.HasValue)
+                                        {
+                                            <span class="badge bg-primary fs-6">@Model.WeightedScore.Value.ToString("F2")</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">سيتم حسابها تلقائياً</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label">ملاحظات</label>
+                            <textarea asp-for="Notes" class="form-control" rows="3"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-1"></i>
+                                    حفظ التعديلات
+                                </button>
+                                <a asp-action="CandidateTests" asp-route-id="@Model.CandidateId" class="btn btn-outline-secondary ms-2">إلغاء</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        معلومات النتيجة
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <small class="text-muted">تاريخ الإنشاء:</small><br>
+                        <strong>@Model.CreatedDate.ToString("yyyy/MM/dd HH:mm")</strong>
+                    </div>
+                    
+                    @if (Model.UpdatedDate.HasValue)
+                    {
+                        <div class="mb-3">
+                            <small class="text-muted">آخر تحديث:</small><br>
+                            <strong>@Model.UpdatedDate.Value.ToString("yyyy/MM/dd HH:mm")</strong>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.UpdatedBy))
+                    {
+                        <div class="mb-3">
+                            <small class="text-muted">محدث بواسطة:</small><br>
+                            <strong>@Model.UpdatedBy</strong>
+                        </div>
+                    }
+
+                    <div class="alert alert-warning">
+                        <h6 class="mb-2">تنبيه:</h6>
+                        <ul class="mb-0 small">
+                            <li>تأكد من صحة البيانات قبل الحفظ</li>
+                            <li>النتيجة الموزونة سيتم حسابها تلقائياً</li>
+                            <li>تغيير الحالة إلى "مؤكد" يعني إقرار النتيجة نهائياً</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} 

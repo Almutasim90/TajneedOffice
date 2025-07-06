@@ -1,0 +1,499 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+بالتأكيد! سأقوم بإعادة صياغة البرومبت الاحترافي لـ Cursor AI، متضمناً الآن تفاصيل تصميم قاعدة البيانات (DDL) بشكل كامل ومباشر ضمن المرحلة الأولى. هذا سيجعل البرومبت أكثر شمولاً ودقة، ويوفر لـ Cursor AI جميع المعلومات الهيكلية اللازمة للبدء في تطوير المشروع من الصفر.
+
+برومبت احترافي وشامل لتطوير النظام الإلكتروني لمكتب التجنيد من الصفر باستخدام ASP.NET Core MVC بواسطة Cursor AI
+
+الرؤية الشاملة للمشروع:
+الهدف هو تطوير نظام إلكتروني ذكي ومتكامل لمكتب التجنيد في سلاح الجو السلطاني العماني، يُعزز الكفاءة التشغيلية، يضمن الدقة في التقييم، ويسرّع عملية اتخاذ القرار، وذلك بتحويل الإجراءات التقليدية الورقية إلى نظام رقمي متكامل قادر على إنجاز المهام الإلكترونية من المراحل الأولى لعملية التجنيد حتى نهايتها واستخراج النتائج والتقارير الإحصائية. سيتم الاستفادة القصوى من إطار عمل ASP.NET Core MVC وتقنيات الذكاء الاصطناعي لتقديم تجربة مستخدم عصرية وموثوقة.
+
+أهداف النظام الأساسية (ملخصة لـ Cursor AI):
+
+    تحويل نموذج التقييم الورقي إلى نموذج إلكتروني يقوم بالعمليات الحسابية لآلية التقييم.
+
+    سهولة الحصول على التقارير الإحصائية وطباعتها تبعاً للنماذج والتصاميم المعمول بها حالياً.
+
+    سهولة الرجوع على المعلومات والبيانات لاحقاً.
+
+تعليمات عامة لـ Cursor AI:
+
+    الالتزام الصارم بالمتطلبات: يجب أن يلتزم الحل المقدم بكل متطلب وظيفي وغير وظيفي تم تحديده مسبقًا، بما في ذلك المعلومات التوضيحية الجديدة وتصميم قاعدة البيانات المدمج.
+
+    أفضل الممارسات في ASP.NET Core MVC: استخدم أحدث ممارسات وتقنيات ASP.NET Core MVC، بما في ذلك:
+
+        بنية MVC الواضحة (Controllers, Views, Models).
+
+        استخدام طبقة الخدمات (Services Layer) لمنطق الأعمال.
+
+        Entity Framework Core للتعامل مع قاعدة البيانات (Code-First) باستخدام التصميم المقدم.
+
+        Dependency Injection لإدارة التبعيات.
+
+        ASP.NET Core Identity لإدارة المستخدمين والصلاحيات.
+
+        تصميم واجهة مستخدم عصرية ومتجاوبة (Responsive) مع دعم RTL، باستخدام Bootstrap 5 أو Tailwind CSS.
+
+        التركيز على الأداء، الأمان، وقابلية الصيانة.
+
+    تقليل Repository Pattern: تجنب استخدام Repository Pattern الشامل ما لم يكن ذلك ضروريًا للغاية ومعللًا، والسماح لطبقة الخدمات بالتفاعل مباشرة مع DbContext عند الاقتضاء.
+
+    التعليقات البرمجية: يجب أن يكون الكود موثقًا بشكل جيد، مع تعليقات واضحة تشرح المنطق، الخوارزميات، ووظائف الأكواد.
+
+    التسليم في مراحل: قم بتسليم الكود والمخرجات لكل مرحلة على حدة، مع التأكد من جاهزيتها للانتقال للمرحلة التالية.
+
+مراحل التطوير التفصيلية والمهام:
+
+المرحلة 1: البنية التحتية الأساسية والإعداد الأولي (Core Infrastructure & Initial Setup)
+
+الهدف: إعداد هيكل المشروع الأساسي، تصميم قاعدة البيانات وفقًا للمواصفات الدقيقة، وإعداد نظام إدارة المستخدمين والصلاحيات كنقطة انطلاق قوية.
+
+    المهمة 1.1: تهيئة مشروع ASP.NET Core MVC:
+
+        إنشاء مشروع ASP.NET Core MVC جديد.
+
+        تكوين أساسيات المشروع لدعم تصميم واجهة المستخدم العصري (Bootstrap 5 أو Tailwind CSS) ودعم RTL بشكل افتراضي.
+
+    المهمة 1.2: تصميم قاعدة البيانات (Code-First):
+
+        قم بإنشاء نماذج البيانات (Entities) باستخدام Entity Framework Core Code-First بناءً على تصميم قاعدة البيانات المُقدم أدناه. يجب أن تعكس هذه النماذج تماماً الجداول والحقول وأنواع البيانات والعلاقات المحددة.
+
+        تنفيذ Code-First Migrations الأولية لإنشاء قاعدة البيانات.
+
+    تصميم قاعدة البيانات المتكامل (DDL)
+
+    الجداول الأساسية والمساعدة (Core & Lookup Tables)
+
+    1. Ranks (الرتب العسكرية)
+    SQL
+
+CREATE TABLE Ranks (
+    RankId INT IDENTITY(1,1) PRIMARY KEY,
+    RankName NVARCHAR(100) NOT NULL UNIQUE -- اسم الرتبة (مثال: عقيد ركن، مقدم ركن جوي، نقيب، وكيل)
+);
+
+2. Airbases (القواعد العسكرية)
+SQL
+
+CREATE TABLE Airbases (
+    AirbaseId INT IDENTITY(1,1) PRIMARY KEY,
+    AirbaseName NVARCHAR(255) NOT NULL UNIQUE -- اسم القاعدة (مثال: قاعدة السيب الجوية)
+);
+
+3. CandidateCategories (فئات المرشحين)
+SQL
+
+CREATE TABLE CandidateCategories (
+    CategoryId INT IDENTITY(1,1) PRIMARY KEY,
+    CategoryName NVARCHAR(255) NOT NULL UNIQUE, -- اسم الفئة (مثال: المرشحين الطيارين، المرشحين الجامعيين العسكريين)
+    CategoryCode NVARCHAR(50) NOT NULL UNIQUE -- رمز الفئة (مثال: PILOT, UNIV_MIL)
+);
+
+4. EvaluationAxes (محاور التقييم)
+SQL
+
+CREATE TABLE EvaluationAxes (
+    AxisId INT IDENTITY(1,1) PRIMARY KEY,
+    AxisName NVARCHAR(255) NOT NULL, -- اسم المحور (مثال: المظهر، الشخصية، القدرة الذهنية)
+    AxisDescription NVARCHAR(1000) NULL, -- وصف المحور
+    MinScore INT NOT NULL DEFAULT 1, -- أقل درجة (1)
+    MaxScore INT NOT NULL DEFAULT 10, -- أعلى درجة (10)
+    IsActive BIT NOT NULL DEFAULT 1 -- لتفعيل/تعطيل المحور
+);
+
+جداول إدارة المستخدمين (User Management Tables - ASP.NET Core Identity)
+
+5. Users (المستخدمون)
+SQL
+
+CREATE TABLE Users (
+    UserId NVARCHAR(450) PRIMARY KEY, -- يتوافق مع Id في AspNetUsers
+    MilitaryNumber NVARCHAR(100) NOT NULL UNIQUE, -- الرقم العسكري
+    Username NVARCHAR(256) NOT NULL UNIQUE,
+    Email NVARCHAR(256) NULL,
+    PasswordHash NVARCHAR(MAX) NULL,
+    PhoneNumber NVARCHAR(50) NULL,
+    FirstName NVARCHAR(100) NULL,
+    LastName NVARCHAR(100) NULL,
+    RankId INT NOT NULL, -- FK إلى Ranks
+    Position NVARCHAR(100) NULL, -- المنصب (مثال: المقيم 1، رئيس اللجنة، منسق)
+    IsActive BIT NOT NULL DEFAULT 1,
+    CONSTRAINT FK_Users_Ranks FOREIGN KEY (RankId) REFERENCES Ranks(RankId)
+);
+
+6. Roles (الصلاحيات/الأدوار)
+SQL
+
+CREATE TABLE Roles (
+    RoleId NVARCHAR(450) PRIMARY KEY, -- يتوافق مع Id في AspNetRoles
+    RoleName NVARCHAR(256) NOT NULL UNIQUE -- اسم الصلاحية/الدور
+);
+
+7. UserRoles (ربط المستخدمين بالأدوار)
+SQL
+
+CREATE TABLE UserRoles (
+    UserId NVARCHAR(450) NOT NULL,
+    RoleId NVARCHAR(450) NOT NULL,
+    PRIMARY KEY (UserId, RoleId),
+    CONSTRAINT FK_UserRoles_Users FOREIGN KEY (UserId) REFERENCES Users(UserId),
+    CONSTRAINT FK_UserRoles_Roles FOREIGN KEY (RoleId) REFERENCES Roles(RoleId)
+);
+
+جداول بيانات المرشحين والاختبارات (Candidate & Tests Tables)
+
+8. Candidates (المرشحون)
+SQL
+
+CREATE TABLE Candidates (
+    CandidateId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(), -- معرّف فريد للمرشح
+    CategoryId INT NOT NULL, -- FK إلى CandidateCategories
+    FullName NVARCHAR(255) NOT NULL, -- الاسم الثلاثي
+    NationalIdNumber NVARCHAR(50) NOT NULL UNIQUE, -- الرقم المدني
+    ServiceNumber NVARCHAR(100) NULL, -- الرقم العسكري (لضباط الصف المرشحين)
+    DateOfBirth DATE NOT NULL, -- تاريخ الميلاد
+    Governorate NVARCHAR(100) NOT NULL, -- الولاية
+    Phone1 NVARCHAR(20) NULL, -- رقم الهاتف 1
+    Phone2 NVARCHAR(20) NULL, -- رقم الهاتف 2
+    Phone3 NVARCHAR(20) NULL, -- رقم الهاتف 3
+    CurrentRankId INT NULL, -- FK إلى Ranks (لضباط الصف)
+    CurrentAirbaseId INT NULL, -- FK إلى Airbases (لضباط الصف)
+    Department NVARCHAR(255) NULL, -- القسم/المديرية (لضباط الصف)
+    JobTitle NVARCHAR(255) NULL, -- المهنة
+    Major NVARCHAR(255) NULL, -- التخصص (للجامعيين)
+    University NVARCHAR(255) NULL, -- الجامعة (للجامعيين)
+    GraduationYear INT NULL, -- سنة التخرج (للجامعيين)
+    MarksGrade NVARCHAR(50) NULL, -- التقدير (للجامعيين)
+    Address NVARCHAR(500) NULL,
+    IsActive BIT NOT NULL DEFAULT 1, -- حالة نشاط المرشح
+    CurrentStatus NVARCHAR(100) NOT NULL DEFAULT 'جديد', -- حالة المرشح في عملية التجنيد (مثال: في انتظار التقييم، مكتمل، موصى به)
+    CONSTRAINT FK_Candidates_CandidateCategories FOREIGN KEY (CategoryId) REFERENCES CandidateCategories(CategoryId),
+    CONSTRAINT FK_Candidates_CurrentRanks FOREIGN KEY (CurrentRankId) REFERENCES Ranks(RankId),
+    CONSTRAINT FK_Candidates_CurrentAirbases FOREIGN KEY (CurrentAirbaseId) REFERENCES Airbases(AirbaseId)
+);
+
+9. CandidateTestScores (درجات اختبارات المرشحين)
+SQL
+
+CREATE TABLE CandidateTestScores (
+    TestScoreId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    CandidateId UNIQUEIDENTIFIER NOT NULL, -- FK إلى Candidates
+    EnglishScore DECIMAL(5,2) NULL, -- درجة اختبار اللغة الإنجليزية
+    MathematicsScore DECIMAL(5,2) NULL, -- درجة اختبار الرياضيات
+    GeneralCultureScore DECIMAL(5,2) NULL, -- درجة اختبار الثقافة العامة
+    ArabicScore DECIMAL(5,2) NULL, -- درجة اختبار اللغة العربية
+    FlightAptitudeScore DECIMAL(5,2) NULL, -- درجة قابلية الطيران
+    DrivingSkillScore DECIMAL(5,2) NULL, -- درجة مهارة القيادة
+    CommunicationSkillScore DECIMAL(5,2) NULL, -- درجة مهارة الاتصال
+    ProfessionalEvaluationScore DECIMAL(5,2) NULL, -- درجة التقييم المهني
+    CONSTRAINT FK_CandidateTestScores_Candidates FOREIGN KEY (CandidateId) REFERENCES Candidates(CandidateId)
+);
+
+10. MedicalExaminations (الفحوصات الطبية)
+SQL
+
+CREATE TABLE MedicalExaminations (
+    MedicalExamId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    CandidateId UNIQUEIDENTIFIER NOT NULL, -- FK إلى Candidates
+    InitialExamResult NVARCHAR(50) NULL, -- نتيجة الفحص الطبي المبدئي
+    InitialExamDate DATE NULL, -- تاريخ الفحص الطبي المبدئي
+    ComprehensiveExamResult NVARCHAR(50) NULL, -- نتيجة الفحص الطبي الشامل
+    PhysicalFitnessResult NVARCHAR(50) NULL, -- نتيجة فحص اللياقة البدنية
+    HeightCM DECIMAL(5,2) NULL, -- الطول بالسنتيمتر
+    CONSTRAINT FK_MedicalExaminations_Candidates FOREIGN KEY (CandidateId) REFERENCES Candidates(CandidateId)
+);
+
+جداول عملية التقييم (Evaluation Process Tables)
+
+11. EvaluationSubmissions (درجات المقيمين/تقديمات التقييم)
+SQL
+
+CREATE TABLE EvaluationSubmissions (
+    SubmissionId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    CandidateId UNIQUEIDENTIFIER NOT NULL, -- FK إلى Candidates
+    EvaluatorUserId NVARCHAR(450) NOT NULL, -- FK إلى Users (المقيم)
+    SubmissionDate DATETIME NOT NULL DEFAULT GETDATE(),
+    IsSubmittedToCoordinator BIT NOT NULL DEFAULT 0, -- هل تم إرسال التقييم للمنسق
+    TotalScore DECIMAL(5,2) NULL, -- مجموع الدرجات للمقيم الواحد (8 محاور)
+    AverageScore DECIMAL(5,2) NULL, -- متوسط الدرجة للمقيم الواحد
+    Assessment NVARCHAR(50) NULL, -- التقدير (ممتاز، جيد جداً...)
+    Recommendation NVARCHAR(50) NULL, -- التوصية (أوصي/لا أوصي)
+    ElectronicSignaturePath NVARCHAR(MAX) NULL, -- مسار أو Base64 لصورة التوقيع
+    CONSTRAINT FK_EvaluationSubmissions_Candidates FOREIGN KEY (CandidateId) REFERENCES Candidates(CandidateId),
+    CONSTRAINT FK_EvaluationSubmissions_Users FOREIGN KEY (EvaluatorUserId) REFERENCES Users(UserId)
+);
+
+12. EvaluationAxisScores (درجات محاور التقييم)
+SQL
+
+CREATE TABLE EvaluationAxisScores (
+    AxisScoreId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    SubmissionId UNIQUEIDENTIFIER NOT NULL, -- FK إلى EvaluationSubmissions
+    AxisId INT NOT NULL, -- FK إلى EvaluationAxes
+    Score DECIMAL(5,2) NOT NULL, -- الدرجة المعطاة للمحور (1-10)
+    Strengths NVARCHAR(MAX) NULL, -- نقاط القوة الوصفية
+    Weaknesses NVARCHAR(MAX) NULL, -- نقاط الضعف الوصفية
+    CONSTRAINT FK_EvaluationAxisScores_Submissions FOREIGN KEY (SubmissionId) REFERENCES EvaluationSubmissions(SubmissionId),
+    CONSTRAINT FK_EvaluationAxisScores_Axes FOREIGN KEY (AxisId) REFERENCES EvaluationAxes(AxisId)
+);
+
+13. CommitteeEvaluationSummaries (ملخصات تقييم اللجنة)
+SQL
+
+    CREATE TABLE CommitteeEvaluationSummaries (
+        SummaryId UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+        CandidateId UNIQUEIDENTIFIER NOT NULL UNIQUE, -- FK إلى Candidates (كل مرشح له ملخص واحد نهائي)
+        OverallCommitteeAverageScore DECIMAL(5,2) NULL, -- متوسط درجات جميع الأعضاء
+        TotalPercentageScore DECIMAL(5,2) NULL, -- النسبة المئوية لمجموع الدرجات (100%) بعد تطبيق الأوزان
+        OverallAssessment NVARCHAR(50) NULL, -- التقدير النهائي للجنة (ممتاز، جيد جداً...)
+        RecommendedVotesCount INT NULL, -- عدد الأصوات "أوصي"
+        NotRecommendedVotesCount INT NULL, -- عدد الأصوات "لا أوصي"
+        CommanderDecision NVARCHAR(255) NULL, -- قرار قائد السلاح
+        CoordinatorApprovalDate DATETIME NULL, -- تاريخ اعتماد المنسق
+        HeadOfCommitteeApprovalDate DATETIME NULL, -- تاريخ اعتماد رئيس اللجنة
+        IsFinalized BIT NOT NULL DEFAULT 0, -- هل تم اعتماد الملخص النهائي
+        CONSTRAINT FK_CommitteeEvaluationSummaries_Candidates FOREIGN KEY (CandidateId) REFERENCES Candidates(CandidateId)
+    );
+
+    المهمة 1.3: إعداد نظام الهوية والصلاحيات (ASP.NET Core Identity & RBAC):
+
+        دمج ASP.NET Core Identity باستخدام الجداول المُصممة (Users, Roles, UserRoles).
+
+        تحديد الأدوار الأساسية: CommitteeMember (عضو اللجنة), Coordinator (منسق اللجنة - ركن/1 تجنيد), Admin (إدارة), HeadOfCommittee (رئيس اللجنة).
+
+        تكوين نظام الصلاحيات (Policy-based Authorization) لفرض الوصول بناءً على الدور (مثلاً: أعضاء اللجنة يمكنهم الوصول فقط لنماذج التقييم الفردية الخاصة بهم).
+
+    المهمة 1.4: تصميم التخطيط العام للواجهة (Layout Design):
+
+        إنشاء تخطيط (Layout) شامل باستخدام Razor Layouts يتضمن شريط التنقل العلوي (Navbar) والقائمة الجانبية (Sidebar) القابلة للتوسع والانكماش.
+
+        يجب أن تدعم القائمة الجانبية ودورة تصميم الواجهة دعم RTL بشكل كامل، وأن تكون سلسة في حركتها.
+
+        يجب أن يعرض شريط التنقل العلوي اسم المستخدم ودوره الحالي.
+
+المخرجات المتوقعة لهذه المرحلة:
+
+    مشروع ASP.NET Core MVC مهيأ بالكامل مع بنية مجلدات واضحة.
+
+    قاعدة بيانات مُنشأة بالكامل باستخدام Code-First Migrations بناءً على التصميم المقدم.
+
+    نظام مستخدمين وصلاحيات أساسي فعال عبر ASP.NET Core Identity.
+
+    تخطيط عام للواجهة الأمامية (Layout) مع قائمة جانبية تفاعلية ودعم RTL.
+
+المرحلة 2: إدارة بيانات المرشحين واستيرادها (Candidate Data Management & Import)
+
+الهدف: بناء الوظائف الأساسية لإدارة بيانات المرشحين واستيرادها إلى النظام، وضمان دقة البيانات الأولية.
+
+    المهمة 2.1: نماذج المرشحين وواجهات CRUD:
+
+        إنشاء نماذج العرض (View Models) المقابلة لكيانات المرشحين المختلفة، مع تضمين التحقق من الصحة (Validation) لكل حقل.
+
+        تطوير واجهات المستخدم (Views) لإنشاء، عرض، تعديل، وحذف بيانات المرشحين (CRUD Operations).
+
+        يجب أن تتكيف واجهة المستخدم لعرض وتحرير الحقول الخاصة بكل فئة من فئات المرشحين، مع مراعاة الحقول الإلزامية/غير الإلزامية لكل فئة (مثل التخصص، سنة التخرج، الجامعة للمرشحين الطيارين حديثي التوظيف).
+
+    المهمة 2.2: وظيفة استيراد Excel:
+
+        تطوير وحدة / خدمة CandidateImportService في طبقة الخدمات، المسؤولة عن استيراد بيانات المرشحين من ملفات Excel.
+
+        يجب أن تتضمن الوحدة آليات قوية للتحقق من صحة البيانات (Data Validation) أثناء عملية الاستيراد لضمان جودة وسلامة المعلومات المخزنة في قاعدة البيانات.
+
+        يجب أن تكون عملية الاستيراد قادرة على التعامل مع جميع الحقول المحددة لكل فئة من فئات المرشحين.
+
+    المهمة 2.3: وظائف البحث والتصفية والفرز:
+
+        تنفيذ واجهة مستخدم (Views) ووظائف backend (Controllers & Services) للبحث، التصفية، والفرز في قوائم المرشحين بناءً على معايير متعددة (مثل الرقم المدني، الاسم، الفئة، الولاية، حالة التقييم).
+
+المخرجات المتوقعة لهذه المرحلة:
+
+    واجهات CRUD كاملة وفعالة لإدارة المرشحين.
+
+    وظيفة استيراد بيانات المرشحين من ملفات Excel تعمل بشكل موثوق مع تحقق شامل من الصحة.
+
+    وظائف بحث وتصفية وفرز متقدمة لقوائم المرشحين.
+
+المرحلة 3: تطوير نظام التقييم الإلكتروني الذكي (Smart Electronic Evaluation System Development)
+
+الهدف: بناء جوهر نظام التقييم، بما في ذلك نماذج التقييم الفردية، منطق حساب الدرجات المعقدة بدقة، ومعالجة التوقيعات الإلكترونية، بما يتماشى مع آلية عمل اللجنة.
+
+    المهمة 3.1: نماذج التقييم الفردية (مطابقة للنسق تمامًا):
+
+        تطوير واجهات المستخدم (Razor Views) لنماذج التقييم الفردية لكل فئة من فئات المرشحين.
+
+        الأهمية القصوى: يجب أن تكون هذه النماذج مطابقة تمامًا للنسق والتصميم الموضح في الصورة المرفقة "Main Committee form.png" والملاحق الأخرى (مثال: المرفق 8، 9، 10، 11، 12، 13، 14 من "مشروع مكتب التجنيد.pdf" و "استمارات التقييم.pdf").
+
+        يجب أن يحتوي كل محور تقييم (8 محاور محددة: المظهر، الشخصية، القدرة الذهنية والعقلية، الاهتمامات والميول الشخصية، الأنشطة، المقدرة التعبيرية، الوعي العام، الطموح) على حقل إدخال للدرجة (من 1 إلى 10).
+
+        يجب أن تتضمن النماذج مربعات نصية مخصصة لـ "نقاط القوة" و "نقاط الضعف" لكل محور.
+
+        يجب أن تظهر بيانات المرشح ذات الصلة تلقائياً عند اختيار اسمه (مثال: الرقم المدني، الاسم، الرتبة، الجامعة، سنة التخرج، وقت المقابلة).
+
+        يجب أن يكون تصميم هذه النماذج مرناً للتعامل مع أي تغييرات مستقبلية في المعايير.
+
+    المهمة 3.2: معالجة التوقيع الإلكتروني كصورة:
+
+        تضمين حقل تحميل ملف (File Input) داخل نموذج التقييم للسماح للمقيم برفع صورة توقيعه الإلكتروني.
+
+        يجب أن يدعم النظام تخزين هذه الصورة (كمسار أو Base64) وربطها بالتقييم المقدم.
+
+        يجب عرض معاينة فورية للصورة بعد تحميلها باستخدام JavaScript.
+
+    المهمة 3.3: تنفيذ منطق حساب الدرجات والأوزان المعقد (Smart Scoring Logic):
+
+        تطوير خدمة EvaluationProcessingService في طبقة الخدمات، المسؤولة عن:
+
+            حساب متوسط درجات كل عضو في اللجنة (مجموع 8 محاور / 8).
+
+            الالتزام الصارم بمنطق الأوزان: يجب على الخدمة تطبيق منطق الأوزان المحدد بدقة في الملحق (أ) من وثيقة "سياسة جوانب التجنيد.pdf" لحساب "النسبة المئوية لمجموع الدرجات" (الدرجة الإجمالية النهائية) لكل مرشح.
+
+            يجب أن يكون هناك مسار حسابي أو منطق برمجي مخصص لكل فئة مرشح تعكس الأوزان المختلفة لاختبارات مثل اللغة الإنجليزية، الرياضيات، الثقافة العامة، القيادة، الاتصال، إلخ. (وفقاً للجداول في الملحق أ).
+
+            يجب أن يُطبق شرط نسبة القبول 75% للطيارين في مادتي اللغة الإنجليزية والرياضيات بالإضافة إلى النسبة العامة، اعتبارًا من الإعلان القادم (دورات 2026م).
+
+        تحديد التقدير (ممتاز، جيد جداً، جيد، متوسط، ضعيف) بناءً على متوسط الدرجات (التقييم الفردي والنهائي).
+
+    المهمة 3.4: إدارة توصيات اللجنة وأصواتها:
+
+        تضمين خيار "أوصي" / "لا أوصي" في نموذج التقييم.
+
+        يجب أن يسجل النظام صوت كل عضو (نعم أو لا) ويحسب إجمالي عدد الأصوات "أوصي" و "لا أوصي" لكل مرشح.
+
+المخرجات المتوقعة لهذه المرحلة:
+
+    نماذج تقييم إلكترونية متكاملة، وظيفية، ومطابقة تمامًا للنسق المرفق.
+
+    منطق حساب درجات دقيق يلتزم بجميع الأوزان والشروط المحددة لكل فئة.
+
+    وظيفة تحميل ومعاينة التوقيعات الإلكترونية.
+
+    تسجيل توصيات الأعضاء وأصواتهم.
+
+المرحلة 4: سير العمل ولوحات التحكم (Workflow & Dashboarding)
+
+الهدف: بناء تدفق عملية التقييم من الإرسال إلى الاعتماد، وتطوير لوحات التحكم اللازمة لكل من أعضاء اللجنة والمنسق.
+
+    المهمة 4.1: سير عمل تقديم التقييم:
+
+        تمكين أعضاء اللجنة من "حفظ" التقييمات كمسودات (اختياري) و "إرسال" التقييمات النهائية إلى منسق اللجنة (ركن/1 تجنيد).
+
+        يجب أن يتحقق النظام من اكتمال جميع البيانات المطلوبة (الدرجات، نقاط القوة/الضعف، التوصية، التوقيع) قبل السماح بالإرسال.
+
+        بعد الانتهاء من تقييم جميع الأعضاء، يجب أن تتغير حالة المرشح إلى "مكتمل" ويظهر في جدول النتائج أو التقارير حسب تصنيفه.
+
+    المهمة 4.2: لوحة تحكم المنسق (Coordinator Dashboard):
+
+        تصميم واجهة مستخدم خاصة بدور المنسق (Rukn/1 تجنيد) ورئيس اللجنة.
+
+        يجب أن تعرض لوحة التحكم "تقييمات الأعضاء المعلقة للمراجعة" في جدول، مع تفاصيل مثل المرشح، المقيم، متوسط الدرجة، التوصية، والحالة.
+
+        يجب أن تتضمن "التقرير النهائي للجنة" (نموذج متوسط درجات الأعضاء) والذي يعرض:
+
+            متوسط الدرجات المجمّع من جميع الأعضاء.
+
+            إجمالي مجموع الدرجات.
+
+            التقدير العام للجنة.
+
+            عدد الأصوات الإجمالية (أوصي/لا أوصي).
+
+            أعمدة لدرجات كل عضو (رئيس اللجنة + 6 أعضاء آخرين).
+
+        يجب أن يتمكن المنسق من "اعتماد تقرير اللجنة".
+
+    المهمة 4.3: صلاحيات البدائل:
+
+        برمجة صلاحية أن يكون Rukn1Tajnid بديلاً عن أحد أعضاء اللجنة الرئيسية (ويمكنه الدخول إلى نموذج التقييم كعضو).
+
+        برمجة صلاحية أن يكون Rukn2Tajnid منسقًا بديلاً للجنة الرئيسية.
+
+        يجب أن تعكس واجهة المستخدم هذه الصلاحيات بوضوح (مثلاً، خيار "التبديل إلى دور العضو" لركن/1 تجنيد).
+
+المخرجات المتوقعة لهذه المرحلة:
+
+    سير عمل فعال لتقديم ومراجعة التقييمات.
+
+    لوحة تحكم كاملة للمنسق تعرض التقييمات المعلقة والتقرير النهائي للجنة.
+
+    تطبيق صلاحيات البدائل بشكل وظيفي.
+
+المرحلة 5: التقارير النهائية وضمان الجودة والنشر (Final Reporting, QA & Deployment)
+
+الهدف: إعداد النظام لتوليد التقارير الرسمية، وإجراء اختبارات شاملة، وتوثيق المشروع للنشر النهائي، وتوفير سهولة الوصول للمعلومات والتقارير الإحصائية.
+
+    المهمة 5.1: توليد تقارير PDF النهائية:
+
+        تطوير خدمة ReportGenerationService في طبقة الخدمات لإنشاء تقارير PDF قابلة للطباعة.
+
+        الأهمية القصوى: يجب أن تكون هذه التقارير مطابقة تمامًا للنماذج والتصاميم المعمول بها حالياً والموضحة في وثيقة "مشروع مكتب التجنيد.pdf" (الملاحق 16، 17، 18، 19) من حيث:
+
+            التنسيق، الخطوط، الألوان، التخطيط العام.
+
+            ترتيب الأعمدة والحقول (التسلسل، الرقم المدني، الاسم، الدرجات التفصيلية، النسبة المئوية لمجموع الدرجات، عدد الأصوات، قرار قائد السلاح).
+
+            التمييز الواضح بين المرشحين "الموصى بهم" و "غير الموصى بهم".
+
+    المهمة 5.2: نظام التنبيهات الداخلية:
+
+        تنفيذ نظام تنبيهات داخلية ضمن واجهة المستخدم (مثل الإشعارات المنبثقة أو مركز الإشعارات).
+
+        يجب أن يرسل النظام إشعارات للمستخدمين المعنيين بالمهام الجديدة أو تحديثات سير العمل (مثلاً: "نموذج تقييم جديد متاح"، "تم إرسال تقييم للمراجعة").
+
+    المهمة 5.3: ضمان الجودة والاختبار الشامل:
+
+        تطوير وتنفيذ خطة اختبار شاملة تغطي:
+
+            اختبارات الوحدة (Unit Tests): لكل منطق حساب الدرجات، التحقق من صحة البيانات، ومنطق صلاحيات الأدوار.
+
+            اختبارات التكامل (Integration Tests): للتحقق من تدفق البيانات بين الطبقات والتفاعل مع قاعدة البيانات.
+
+            اختبارات القبول (Acceptance Tests): للتحقق من أن جميع المتطلبات الوظيفية الرئيسية (مثل الاستيراد، التقييم، الاعتماد، التقارير) تعمل كما هو متوقع من منظور المستخدم.
+
+            اختبارات الأداء (Performance Tests): لضمان سرعة واستجابة النظام، خاصة عند التعامل مع قوائم كبيرة من المرشحين.
+
+            اختبارات الأمان (Security Tests): للتحقق من آليات المصادقة والتفويض، حماية البيانات (خاصة التوقيعات والصور)، ومنع الثغرات الشائعة (XSS, CSRF, Injection).
+
+        التحقق من الالتزام التام بمتطلبات الامتثال (مثل نسب الطول ودرجات الطيارين 75%).
+
+    المهمة 5.4: التوثيق النهائي والنشر:
+
+        إنشاء وثائق فنية كاملة للنظام (تصميم قاعدة البيانات، مخططات الفئات، وصف الخدمات، دليل المطورين).
+
+        إعداد دليل مستخدم مفصل يغطي جميع وظائف النظام لكل دور مستخدم.
+
+        تجهيز تعليمات النشر (Deployment Instructions) للنظام على بيئة شبكة داخلية.
+
+المخرجات المتوقعة لهذه المرحلة:
+
+    تطبيق ويب ASP.NET Core MVC كامل وجاهز للتشغيل.
+
+    وظيفة توليد تقارير PDF دقيقة ومطابقة للنماذج المرفقة.
+
+    نظام تنبيهات داخلية وظيفي.
+
+    تقارير اختبار شاملة تؤكد جودة وأمان النظام وامتثاله للمتطلبات.
+
+    وثائق فنية ودليل مستخدم كاملين.
+
+معايير التقييم لأداء Cursor AI (كيف سيتم تقييم الحل المقدم):
+
+سيتم تقييم الحل المقدم من Cursor AI بناءً على مدى الالتزام والتميز في النقاط التالية:
+
+    الامتثال الوظيفي الكامل: هل تم تحقيق جميع المتطلبات الوظيفية المذكورة بشكل كامل ودقيق؟
+
+    دقة منطق الأعمال: هل تم تنفيذ منطق حساب الدرجات والأوزان المعقد لكل فئة من فئات المرشحين بشكل صحيح ودقيق وفقًا للملحق (أ)؟
+
+    مطابقة الواجهة الرسومية (Pixel-Perfect Matching): هل نماذج التقييم الفردية وتقارير PDF النهائية (الملاحق 16-19) مطابقة تمامًا للنسق والتصميم الموضح في المستندات المرفقة، بما في ذلك الصورة الجديدة "Main Committee form.png"؟
+
+    جودة الكود: هل الكود نظيف، منظم، موثق بشكل جيد، وقابل للصيانة؟ هل يتبع أفضل ممارسات ASP.NET Core MVC؟
+
+    الأداء: هل النظام سريع الاستجابة وفعال في معالجة البيانات؟
+
+    الأمان: هل تم تطبيق آليات أمان قوية (Identity, RBAC, معالجة التوقيعات) لحماية البيانات والوصول؟
+
+    تجربة المستخدم (UX): هل الواجهة بديهية، سهلة الاستخدام، وتوفر تدفقًا سلسًا للمهام؟ هل تعمل القائمة الجانبية بشكل فعال؟
+
+
+    الالتزام بالنطاق: هل تم تجنب إضافة ميزات غير مطلوبة أو تجاوز النطاق المحدد للمشروع؟

@@ -1,0 +1,27 @@
+@model TajneedOffice.Models.CandidateCategory
+@{
+    ViewData["Title"] = "تفاصيل التصنيف";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">تفاصيل التصنيف</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">اسم التصنيف</dt>
+                        <dd class="col-sm-9">@Model.CategoryName</dd>
+                        <dt class="col-sm-3">رمز التصنيف</dt>
+                        <dd class="col-sm-9"><span class="badge bg-secondary">@Model.CategoryCode</span></dd>
+                        <dt class="col-sm-3">الوصف</dt>
+                        <dd class="col-sm-9">@(string.IsNullOrEmpty(Model.Description) ? "لا يوجد وصف" : Model.Description)</dd>
+                    </dl>
+                    <a asp-action="Edit" asp-route-id="@Model.CategoryId" class="btn btn-primary">تعديل</a>
+                    <a asp-action="Index" class="btn btn-secondary">العودة للقائمة</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

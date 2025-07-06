@@ -1,0 +1,251 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+/* Font face with fallback */
+@font-face {
+    font-family: Cairo;
+    src: url('../fonts/Cairo-Medium.ttf');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+html, body {
+    font-family: 'Cairo', Arial, Helvetica, sans-serif;
+    font-weight: 500;
+    direction: rtl; /* RTL support */
+    position: relative;
+    min-height: 100%;
+    background-color: #f4f6fb;
+    color: var(--text-color);
+    transition: background-color var(--transition), color var(--transition);
+}
+
+body {
+    margin-bottom: 60px;
+    font-weight: 500;
+}
+
+/* Responsive font size */
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* Focus styles for accessibility */
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus,
+.form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+/* DataTables pagination styles */
+.dataTables_wrapper .dataTables_paginate {
+    text-align: right;
+    margin-top: 10px;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    color: #0a2a73 !important;
+    border: 1px solid #2663a4;
+    background-color: white;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    text-decoration: none !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    background-color: #2663a4;
+    color: white !important;
+    border-color: #2663a4;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #0a2a73;
+    color: white !important;
+    border-color: #0a2a73;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+    color: #ccc !important;
+    border-color: #ccc;
+    background-color: #f8f8f8;
+    cursor: not-allowed;
+}
+
+/* Global Notification Styles */
+#globalNotificationContainer {
+    animation: slideDown 0.3s ease-out;
+}
+
+#globalNotification {
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 12px 16px;
+    margin: 0;
+    backdrop-filter: blur(10px);
+    border-left: 4px solid;
+}
+
+#globalNotification.alert-success {
+    background-color: rgba(40, 167, 69, 0.95);
+    color: white;
+    border-left-color: #28a745;
+}
+
+#globalNotification.alert-danger {
+    background-color: rgba(220, 53, 69, 0.95);
+    color: white;
+    border-left-color: #dc3545;
+}
+
+#globalNotification.alert-warning {
+    background-color: rgba(255, 193, 7, 0.95);
+    color: #212529;
+    border-left-color: #ffc107;
+}
+
+#globalNotification.alert-info {
+    background-color: rgba(23, 162, 184, 0.95);
+    color: white;
+    border-left-color: #17a2b8;
+}
+
+#globalNotification .btn-close {
+    filter: invert(1);
+    opacity: 0.8;
+}
+
+#globalNotification .btn-close:hover {
+    opacity: 1;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100px) translateX(-50%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) translateX(-50%);
+        opacity: 1;
+    }
+}
+
+/* RTL specific adjustments for notifications */
+#globalNotificationContainer {
+    direction: rtl;
+}
+
+#globalNotification .btn-close {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+/* =================================
+   Dashboard / Index Page Styles
+   ================================= */
+.page-header {
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    transition: var(--transition);
+}
+
+.page-title {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.page-subtitle {
+    color: var(--text-color-muted);
+}
+
+.section-title {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.title-divider {
+    width: 80px;
+    height: 3px;
+    background-color: var(--primary-color);
+    border: none;
+    opacity: 1;
+}
+
+/* Stat Cards */
+.stat-card {
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    background-color: #fff;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.75rem;
+    flex-shrink: 0;
+}
+
+.stat-value {
+    font-weight: 700;
+    font-size: 2.25rem;
+    color: var(--text-color);
+}
+
+.stat-label {
+    font-weight: 500;
+    color: var(--text-color-secondary);
+}
+
+/* Action Cards */
+.action-card-hover {
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    background-color: #fff;
+    transition: var(--transition);
+}
+
+.action-card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+}
+
+.action-card-hover .card-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-card-hover .card-title {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.action-card-hover .card-text {
+    color: var(--text-color-muted);
+}
+
+.content-area {
+    background: transparent !important;
+}
+
+.card, .stat-card, .action-card-hover {
+    background-color: #fff;
+}

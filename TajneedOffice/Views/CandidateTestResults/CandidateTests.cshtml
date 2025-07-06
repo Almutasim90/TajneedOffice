@@ -1,0 +1,240 @@
+@model IEnumerable<TajneedOffice.Models.CandidateTestResult>
+
+@{
+    ViewData["Title"] = "اختبارات المرشح";
+    var candidate = ViewBag.Candidate as TajneedOffice.Models.Candidate;
+    var totalWeightedScore = Model.Where(m => m.WeightedScore.HasValue).Sum(m => m.WeightedScore.Value);
+    var completedTests = Model.Where(m => m.Status == "مؤكد").Count();
+    var passedTests = Model.Where(m => m.IsPassed == true).Count();
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-primary mb-1">
+                <i class="fas fa-user-graduate me-2"></i>
+                اختبارات المرشح
+            </h2>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Dashboard">لوحة التحكم</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="CandidateTestResults" asp-action="Index">نتائج الاختبارات</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">اختبارات المرشح</li>
+                </ol>
+            </nav>
+        </div>
+        <div>
+            <a asp-controller="CandidateTestResults" asp-action="Index" class="btn btn-outline-secondary me-2">
+                <i class="fas fa-arrow-left me-1"></i>
+                العودة للقائمة
+            </a>
+            <a asp-action="Create" asp-route-candidateId="@candidate?.CandidateId" class="btn btn-success">
+                <i class="fas fa-plus me-1"></i>
+                إضافة اختبار
+            </a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (candidate != null)
+    {
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4 class="mb-2">
+                            <i class="fas fa-user me-2"></i>
+                            @candidate.FullName
+                        </h4>
+                        <div class="mb-2">
+                            <span class="badge bg-primary me-2">@candidate.Category.CategoryCode</span>
+                            <span class="text-muted">@candidate.Category.CategoryName</span>
+                        </div>
+                        @if (!string.IsNullOrEmpty(candidate.ServiceNumber))
+                        {
+                            <p class="mb-1">
+                                <strong>الرقم العسكري:</strong> @candidate.ServiceNumber
+                            </p>
+                        }
+                        @if (!string.IsNullOrEmpty(candidate.NationalIdNumber))
+                        {
+                            <p class="mb-1">
+                                <strong>الرقم المدني:</strong> @candidate.NationalIdNumber
+                            </p>
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row text-center">
+                            <div class="col-md-4">
+                                <div class="border rounded p-3">
+                                    <h5 class="text-primary mb-1">@Model.Count()</h5>
+                                    <small class="text-muted">إجمالي الاختبارات</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="border rounded p-3">
+                                    <h5 class="text-success mb-1">@passedTests</h5>
+                                    <small class="text-muted">اختبارات ناجحة</small>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="border rounded p-3">
+                                    <h5 class="text-info mb-1">@totalWeightedScore.ToString("F2")</h5>
+                                    <small class="text-muted">النتيجة الإجمالية</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-clipboard-list me-2"></i>
+                نتائج الاختبارات
+            </h5>
+            <span class="badge bg-info">@Model.Count() اختبار</span>
+        </div>
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover" id="candidateTestsTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>الاختبار</th>
+                                <th>النتيجة</th>
+                                <th>النتيجة الموزونة</th>
+                                <th>الحالة</th>
+                                <th>تاريخ الاختبار</th>
+                                <th class="text-center">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderBy(m => m.TestDate))
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@item.TestType.TestName</strong>
+                                        @if (!string.IsNullOrEmpty(item.TestType.TestCode))
+                                        {
+                                            <br>
+                                            <small class="text-muted">@item.TestType.TestCode</small>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.NumericScore.HasValue)
+                                        {
+                                            <span class="badge bg-info fs-6">@item.NumericScore.Value</span>
+                                        }
+                                        @if (!string.IsNullOrEmpty(item.TextResult))
+                                        {
+                                            @if (item.TextResult == "لائق" || item.TextResult == "ناجح")
+                                            {
+                                                <span class="badge bg-success">@item.TextResult</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">@item.TextResult</span>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.WeightedScore.HasValue)
+                                        {
+                                            <span class="badge bg-primary">@item.WeightedScore.Value.ToString("F2")</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @switch (item.Status)
+                                        {
+                                            case "مؤكد":
+                                                <span class="badge bg-success">مؤكد</span>
+                                                break;
+                                            case "معلق":
+                                                <span class="badge bg-warning">معلق</span>
+                                                break;
+                                            case "ملغي":
+                                                <span class="badge bg-danger">ملغي</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.TestDate.ToString("yyyy/MM/dd")
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Edit" asp-route-id="@item.TestResultId"
+                                               class="btn btn-sm btn-outline-primary"
+                                               title="تعديل">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.TestResultId"
+                                               class="btn btn-sm btn-outline-danger"
+                                               title="حذف">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">لا توجد نتائج اختبارات لهذا المرشح</h5>
+                    <p class="text-muted">قم بإضافة نتيجة اختبار جديدة لبدء التسجيل</p>
+                    <a asp-action="Create" asp-route-candidateId="@candidate?.CandidateId" class="btn btn-success">
+                        <i class="fas fa-plus me-1"></i>
+                        إضافة اختبار
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#candidateTestsTable').DataTable({
+                "language": {
+                    "url": "/localization/ar.json"
+                },
+                "order": [[ 6, "desc" ]],
+                "pageLength": 15,
+                "responsive": true,
+                "columnDefs": [
+                    { "orderable": false, "targets": -1 }
+                ]
+            });
+
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
+        });
+    </script>
+} 

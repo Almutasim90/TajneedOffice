@@ -1,0 +1,316 @@
+@model TajneedOffice.Models.Candidate
+
+@{
+    ViewData["Title"] = "تعديل المرشح";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-edit"></i> تعديل المرشح</h1>
+                <div>
+                    <a asp-action="Details" asp-route-id="@Model.CandidateId" class="btn btn-info">
+                        <i class="fas fa-eye"></i> عرض التفاصيل
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-right"></i> العودة للقائمة
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> بيانات المرشح</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="CandidateId" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <!-- Basic Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2">المعلومات الأساسية</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="FullName" class="form-label">الاسم الكامل *</label>
+                                    <input asp-for="FullName" class="form-control" placeholder="أدخل الاسم الكامل" />
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="NationalIdNumber" class="form-label">الرقم المدني *</label>
+                                    <input asp-for="NationalIdNumber" class="form-control" placeholder="أدخل الرقم المدني" />
+                                    <span asp-validation-for="NationalIdNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="ServiceNumber" class="form-label">رقم الخدمة</label>
+                                    <input asp-for="ServiceNumber" class="form-control" placeholder="أدخل رقم الخدمة" />
+                                    <span asp-validation-for="ServiceNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="DateOfBirth" class="form-label">تاريخ الميلاد *</label>
+                                    <input asp-for="DateOfBirth" type="date" class="form-control" />
+                                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Governorate" class="form-label">الولاية *</label>
+                                    <input asp-for="Governorate" class="form-control" placeholder="أدخل الولاية" />
+                                    <span asp-validation-for="Governorate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="CategoryId" class="form-label">الفئة *</label>
+                                    <select asp-for="CategoryId" class="form-select" id="CategoryId">
+                                        <option value="">اختر الفئة</option>
+                                        @foreach (var category in ViewBag.Categories)
+                                        {
+                                            if (Model.CategoryId == category.CategoryId)
+                                            {
+                                                <option value="@category.CategoryId" selected>@category.CategoryName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@category.CategoryId">@category.CategoryName</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Contact Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2">معلومات الاتصال</h6>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="Phone1" class="form-label">رقم الهاتف الأول</label>
+                                    <input asp-for="Phone1" class="form-control" placeholder="أدخل رقم الهاتف" />
+                                    <span asp-validation-for="Phone1" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="Phone2" class="form-label">رقم الهاتف الثاني</label>
+                                    <input asp-for="Phone2" class="form-control" placeholder="أدخل رقم الهاتف" />
+                                    <span asp-validation-for="Phone2" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="mb-3">
+                                    <label asp-for="Phone3" class="form-label">رقم الهاتف الثالث</label>
+                                    <input asp-for="Phone3" class="form-control" placeholder="أدخل رقم الهاتف" />
+                                    <span asp-validation-for="Phone3" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label asp-for="Address" class="form-label">العنوان</label>
+                                    <textarea asp-for="Address" class="form-control" rows="3" placeholder="أدخل العنوان الكامل"></textarea>
+                                    <span asp-validation-for="Address" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Military Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2">المعلومات العسكرية</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="CurrentRankId" class="form-label">الرتبة الحالية</label>
+                                    <select asp-for="CurrentRankId" class="form-select">
+                                        <option value="">اختر الرتبة</option>
+                                        @foreach (var rank in ViewBag.Ranks)
+                                        {
+                                            if (Model.CurrentRankId == rank.RankId)
+                                            {
+                                                <option value="@rank.RankId" selected>@rank.RankName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@rank.RankId">@rank.RankName</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="CurrentRankId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="CurrentAirbaseId" class="form-label">القاعدة الجوية</label>
+                                    <select asp-for="CurrentAirbaseId" class="form-select">
+                                        <option value="">اختر القاعدة الجوية</option>
+                                        @foreach (var airbase in ViewBag.Airbases)
+                                        {
+                                            if (Model.CurrentAirbaseId == airbase.AirbaseId)
+                                            {
+                                                <option value="@airbase.AirbaseId" selected>@airbase.AirbaseName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@airbase.AirbaseId">@airbase.AirbaseName</option>
+                                            }
+                                        }
+                                    </select>
+                                    <span asp-validation-for="CurrentAirbaseId" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Department" class="form-label">القسم</label>
+                                    <input asp-for="Department" class="form-control" placeholder="أدخل القسم" />
+                                    <span asp-validation-for="Department" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="JobTitle" class="form-label">المسمى الوظيفي</label>
+                                    <input asp-for="JobTitle" class="form-control" placeholder="أدخل المسمى الوظيفي" />
+                                    <span asp-validation-for="JobTitle" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Educational Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2">المعلومات التعليمية</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Major" class="form-label">التخصص</label>
+                                    <input asp-for="Major" class="form-control" placeholder="أدخل التخصص" />
+                                    <span asp-validation-for="Major" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="University" class="form-label">الجامعة</label>
+                                    <input asp-for="University" class="form-control" placeholder="أدخل الجامعة" />
+                                    <span asp-validation-for="University" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="GraduationYear" class="form-label">سنة التخرج</label>
+                                    <input asp-for="GraduationYear" type="number" class="form-control" placeholder="أدخل سنة التخرج" />
+                                    <span asp-validation-for="GraduationYear" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="MarksGrade" class="form-label">الدرجة/المعدل</label>
+                                    <input asp-for="MarksGrade" class="form-control" placeholder="أدخل الدرجة أو المعدل" />
+                                    <span asp-validation-for="MarksGrade" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status Information -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h6 class="border-bottom pb-2">معلومات الحالة</h6>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="CurrentStatus" class="form-label">الحالة الحالية</label>
+                                    <select asp-for="CurrentStatus" class="form-select">
+                                        <option value="جديد" selected="@(Model.CurrentStatus == "جديد")">جديد</option>
+                                        <option value="قيد التقييم" selected="@(Model.CurrentStatus == "قيد التقييم")">قيد التقييم</option>
+                                        <option value="مكتمل" selected="@(Model.CurrentStatus == "مكتمل")">مكتمل</option>
+                                        <option value="مرفوض" selected="@(Model.CurrentStatus == "مرفوض")">مرفوض</option>
+                                    </select>
+                                    <span asp-validation-for="CurrentStatus" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="IsActive" class="form-label">نشط</label>
+                                    <div class="form-check">
+                                        <input asp-for="IsActive" class="form-check-input" />
+                                        <label asp-for="IsActive" class="form-check-label">نشط</label>
+                                    </div>
+                                    <span asp-validation-for="IsActive" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-end gap-2">
+                                    <a asp-action="Index" class="btn btn-secondary">
+                                        <i class="fas fa-times"></i> إلغاء
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save"></i> حفظ التغييرات
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // Category-specific field toggling
+            $('#CategoryId').on('change', function() {
+                var categoryId = $(this).val();
+                toggleCategoryFields(categoryId);
+            });
+
+            // Initialize category fields on page load
+            var initialCategoryId = $('#CategoryId').val();
+            if (initialCategoryId) {
+                toggleCategoryFields(initialCategoryId);
+            }
+        });
+
+        function toggleCategoryFields(categoryId) {
+            // Hide all category-specific fields first
+            $('.category-field').hide();
+            
+            // Show relevant fields based on category
+            switch (categoryId) {
+                case '1': // PILOT
+                    $('.pilot-fields').show();
+                    break;
+                case '2': // UNIV_MIL
+                    $('.univ-mil-fields').show();
+                    break;
+                case '3': // UNIV_CIV
+                    $('.univ-civ-fields').show();
+                    break;
+                case '4': // SECONDARY
+                    $('.secondary-fields').show();
+                    break;
+            }
+        }
+    </script>
+} 

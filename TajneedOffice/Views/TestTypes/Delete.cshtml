@@ -1,0 +1,130 @@
+@model TajneedOffice.Models.TestType
+
+@{
+    ViewData["Title"] = "حذف نوع الاختبار";
+    bool canDelete = ViewBag.CanDelete ?? true;
+    string usageMessage = ViewBag.UsageMessage ?? "";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        تأكيد حذف نوع الاختبار
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (!canDelete)
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>تحذير:</strong> @usageMessage
+                        </div>
+                    }
+
+                    <div class="text-center mb-4">
+                        <i class="fas fa-clipboard-list fa-3x text-danger mb-3"></i>
+                        <h4>هل أنت متأكد من حذف نوع الاختبار التالي؟</h4>
+                    </div>
+
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label class="form-label fw-bold">اسم الاختبار:</label>
+                                    <p class="form-control-plaintext">
+                                        @Html.DisplayFor(model => model.TestName)
+                                        @if (!string.IsNullOrEmpty(Model.TestCode))
+                                        {
+                                            <span class="badge bg-secondary ms-2">@Html.DisplayFor(model => model.TestCode)</span>
+                                        }
+                                    </p>
+                                </div>
+
+                                @if (!string.IsNullOrEmpty(Model.Description))
+                                {
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label fw-bold">الوصف:</label>
+                                        <p class="form-control-plaintext">@Html.DisplayFor(model => model.Description)</p>
+                                    </div>
+                                }
+
+                                <div class="col-6 mb-3">
+                                    <label class="form-label fw-bold">نوع المعيار:</label>
+                                    <p class="form-control-plaintext">
+                                        @if (Model.CriteriaType == "درجات")
+                                        {
+                                            <span class="badge bg-info">درجات رقمية</span>
+                                        }
+                                        else if (Model.CriteriaType == "لائق_غير_لائق")
+                                        {
+                                            <span class="badge bg-warning">لائق/غير لائق</span>
+                                        }
+                                        else if (Model.CriteriaType == "ناجح_راسب")
+                                        {
+                                            <span class="badge bg-success">ناجح/راسب</span>
+                                        }
+                                    </p>
+                                </div>
+
+                                <div class="col-6 mb-3">
+                                    <label class="form-label fw-bold">تاريخ الإنشاء:</label>
+                                    <p class="form-control-plaintext">
+                                        @Html.DisplayFor(model => model.CreatedDate)
+                                    </p>
+                                </div>
+
+                                @if (Model.CriteriaType == "درجات")
+                                {
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold">نطاق الدرجات:</label>
+                                        <p class="form-control-plaintext">
+                                            من @Html.DisplayFor(model => model.MinScore) إلى @Html.DisplayFor(model => model.MaxScore)
+                                            (درجة النجاح: @Html.DisplayFor(model => model.PassingScore))
+                                        </p>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (canDelete)
+                    {
+                        <div class="alert alert-danger mt-3" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>ملاحظة:</strong> سيتم تعطيل نوع الاختبار بدلاً من حذفه نهائياً للحفاظ على سلامة البيانات.
+                        </div>
+                    }
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>
+                            إلغاء والعودة
+                        </a>
+                        
+                        @if (canDelete)
+                        {
+                            <form asp-action="Delete" method="post" class="d-inline">
+                                <input type="hidden" asp-for="TestTypeId" />
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash me-1"></i>
+                                    تأكيد الحذف
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-danger" disabled>
+                                <i class="fas fa-ban me-1"></i>
+                                لا يمكن الحذف
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

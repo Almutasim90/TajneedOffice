@@ -1,0 +1,189 @@
+@{
+    ViewData["Title"] = "إعداد النظام";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-cogs me-2"></i>
+                        إعداد النظام والبيانات الأساسية
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="fas fa-check-circle me-2"></i>
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            @TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>حالة البيانات الحالية</h5>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>نوع البيانات</th>
+                                        <th>العدد الحالي</th>
+                                        <th>الحالة</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><i class="fas fa-clipboard-list me-1"></i> أنواع الاختبارات</td>
+                                        <td>@ViewBag.TestTypesCount</td>
+                                        <td>
+                                            @if (ViewBag.TestTypesCount == 0)
+                                            {
+                                                <span class="badge bg-warning">لا توجد بيانات</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">يوجد @ViewBag.TestTypesCount أنواع</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-tags me-1"></i> فئات المرشحين</td>
+                                        <td>@ViewBag.CategoriesCount</td>
+                                        <td>
+                                            @if (ViewBag.CategoriesCount == 0)
+                                            {
+                                                <span class="badge bg-warning">لا توجد بيانات</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">يوجد @ViewBag.CategoriesCount فئات</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-route me-1"></i> مسارات الاختبارات</td>
+                                        <td>@ViewBag.CategoryTestPathsCount</td>
+                                        <td>
+                                            @if (ViewBag.CategoryTestPathsCount == 0)
+                                            {
+                                                <span class="badge bg-warning">لا توجد بيانات</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">يوجد @ViewBag.CategoryTestPathsCount مسار</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-star me-1"></i> الرتب العسكرية</td>
+                                        <td>@ViewBag.RanksCount</td>
+                                        <td>
+                                            @if (ViewBag.RanksCount == 0)
+                                            {
+                                                <span class="badge bg-warning">لا توجد بيانات</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">يوجد @ViewBag.RanksCount رتب</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fas fa-plane me-1"></i> القواعد الجوية</td>
+                                        <td>@ViewBag.AirbasesCount</td>
+                                        <td>
+                                            @if (ViewBag.AirbasesCount == 0)
+                                            {
+                                                <span class="badge bg-warning">لا توجد بيانات</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">يوجد @ViewBag.AirbasesCount قواعد</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card bg-primary bg-opacity-10">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-database me-1"></i>
+                                        إضافة البيانات الأساسية
+                                    </h5>
+                                    <p class="card-text">
+                                        إضافة جميع البيانات الأساسية للنظام:
+                                        <ul>
+                                            <li>10 أنواع اختبارات (إنجليزي، عربي، رياضيات، إلخ)</li>
+                                            <li>مسارات الاختبارات لكل فئة بأوزان 100%</li>
+                                            <li>الرتب العسكرية والقواعد الجوية</li>
+                                        </ul>
+                                    </p>
+                                    <form asp-action="InitializeData" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-primary" 
+                                                onclick="return confirm('هل أنت متأكد من إضافة البيانات الأساسية؟');">
+                                            <i class="fas fa-plus-circle me-1"></i>
+                                            إضافة البيانات الأساسية
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card bg-danger bg-opacity-10">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <i class="fas fa-trash me-1"></i>
+                                        حذف بيانات الاختبارات
+                                    </h5>
+                                    <p class="card-text">
+                                        حذف جميع بيانات الاختبارات ومساراتها:
+                                        <ul>
+                                            <li>سيتم حذف جميع أنواع الاختبارات</li>
+                                            <li>سيتم حذف جميع مسارات الاختبارات</li>
+                                            <li class="text-danger">تحذير: هذا الإجراء لا يمكن التراجع عنه!</li>
+                                        </ul>
+                                    </p>
+                                    <form asp-action="ClearTestData" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-danger" 
+                                                onclick="return confirm('تحذير! سيتم حذف جميع بيانات الاختبارات. هل أنت متأكد؟');">
+                                            <i class="fas fa-trash me-1"></i>
+                                            حذف بيانات الاختبارات
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="@Url.Action("Index", "TestTypes")" class="btn btn-outline-primary">
+                            <i class="fas fa-clipboard-list me-1"></i>
+                            إدارة أنواع الاختبارات
+                        </a>
+                        <a href="@Url.Action("Index", "CategoryTestPaths")" class="btn btn-outline-primary">
+                            <i class="fas fa-route me-1"></i>
+                            إدارة مسارات الاختبارات
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
